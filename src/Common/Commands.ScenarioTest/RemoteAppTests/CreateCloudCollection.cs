@@ -24,7 +24,6 @@ namespace Microsoft.WindowsAzure.Commands.ScenarioTest.RemoteAppTests
                 EnvironmentSetupHelper helper = new EnvironmentSetupHelper();
 
                 modules = Directory.GetFiles(@"ServiceManagement\Azure\RemoteApp", "*.ps1").ToList();
-
                 helper.SetupSomeOfManagementClients();
                 helper.SetupEnvironment(AzureModule.AzureServiceManagement);
                 helper.SetupModules(AzureModule.AzureServiceManagement, modules.ToArray());
@@ -43,7 +42,6 @@ namespace Microsoft.WindowsAzure.Commands.ScenarioTest.RemoteAppTests
         [Trait(Category.AcceptanceType, Category.CheckIn)]
         public void TestRemoteAppEndToEnd()
         {
-            System.Environment.SetEnvironmentVariable("rdfeNameSpace", "rdst15");
             RunPowerShellTest<string>("TestRemoteAppEndToEnd");
         }
     }
