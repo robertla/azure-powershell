@@ -212,9 +212,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands.Management.Storage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands.Management.Storage.Test", "ResourceManager\Storage\Commands.Management.Storage.Test\Commands.Management.Storage.Test.csproj", "{7D1D3B56-4EB4-4819-86FD-43330DED8EE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands.RemoteApp.UnitTest", "ServiceManagement\RemoteApp\Commands.RemoteApp.UnitTest\Commands.RemoteApp.UnitTest.csproj", "{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands.OperationalInsights", "ResourceManager\OperationalInsights\Commands.OperationalInsights\Commands.OperationalInsights.csproj", "{5BE35A94-C20F-4659-AA29-9B9AEBCFAF36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands.OperationalInsights.Test", "ResourceManager\OperationalInsights\Commands.OperationalInsights.Test\Commands.OperationalInsights.Test.csproj", "{11387E0A-4DB6-49B8-BDBC-EE020D85D10F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands.RemoteAppScenarioTest", "ServiceManagement\RemoteApp\Commands.RemoteApp.ScenarioTest\Commands.RemoteAppScenarioTest.csproj", "{C2FA83A2-8668-49DD-A1A0-0359653571CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands.RemoteApp.UnitTest", "ServiceManagement\RemoteApp\Commands.RemoteApp.UnitTest\Commands.RemoteApp.UnitTest.csproj", "{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -522,14 +526,22 @@ Global
 		{7D1D3B56-4EB4-4819-86FD-43330DED8EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D1D3B56-4EB4-4819-86FD-43330DED8EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D1D3B56-4EB4-4819-86FD-43330DED8EE7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BE35A94-C20F-4659-AA29-9B9AEBCFAF36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BE35A94-C20F-4659-AA29-9B9AEBCFAF36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BE35A94-C20F-4659-AA29-9B9AEBCFAF36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BE35A94-C20F-4659-AA29-9B9AEBCFAF36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11387E0A-4DB6-49B8-BDBC-EE020D85D10F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11387E0A-4DB6-49B8-BDBC-EE020D85D10F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11387E0A-4DB6-49B8-BDBC-EE020D85D10F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11387E0A-4DB6-49B8-BDBC-EE020D85D10F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C2FA83A2-8668-49DD-A1A0-0359653571CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C2FA83A2-8668-49DD-A1A0-0359653571CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2FA83A2-8668-49DD-A1A0-0359653571CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2FA83A2-8668-49DD-A1A0-0359653571CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -571,7 +583,8 @@ Global
 		{59D1B5DC-9175-43EC-90C6-CBA601B3565F} = {95C16AED-FD57-42A0-86C3-2CF4300A4817}
 		{BEC9ECE9-A3D6-4B24-A682-1FA890647D9D} = {95C16AED-FD57-42A0-86C3-2CF4300A4817}
 		{7D1D3B56-4EB4-4819-86FD-43330DED8EE7} = {95C16AED-FD57-42A0-86C3-2CF4300A4817}
-		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD} = {95C16AED-FD57-42A0-86C3-2CF4300A4817}
+		{11387E0A-4DB6-49B8-BDBC-EE020D85D10F} = {95C16AED-FD57-42A0-86C3-2CF4300A4817}
 		{C2FA83A2-8668-49DD-A1A0-0359653571CA} = {95C16AED-FD57-42A0-86C3-2CF4300A4817}
+		{7C7123E7-109B-439D-BDDB-E00A51C4EEAD} = {95C16AED-FD57-42A0-86C3-2CF4300A4817}
 	EndGlobalSection
 EndGlobal

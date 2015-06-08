@@ -111,7 +111,7 @@ function PublishRemoteApplications([string] $Collection)
    $programsToPublish += $availablePrograms[$($availablePrograms.Count-2)..$($availablePrograms.Count-1)] 
    Assert({$programsToPublish.Count -eq $numOfApps})
    $applications = $programsToPublish | % { 
-       Publish-AzureRemoteAppProgram -CollectionName $Collection -StartMenuAppId $_.StartMenuAppId -ErrorAction SilentlyContinue -ErrorVariable er ## | Out-Null
+       Publish-AzureRemoteAppProgram -CollectionName $Collection -StartMenuAppId $_.StartMenuAppId -ErrorAction SilentlyContinue -ErrorVariable er
        if ($? -eq $false)
        {
            throw $er
@@ -252,7 +252,4 @@ function TestRemoteAppEndToEnd()
     RemoveRemoteAppUsers $collection $msaUsers
     UnpublishRemoteApplications $collection ($applications | % {$_.ApplicationAlias})
     DeleteRemoteAppCollection $collection
-    Write-Verbose "Done current time: $(Get-Date)"
-
-    Set-Variable -Name VerbosePreference -Value SilentlyContinue
 }
