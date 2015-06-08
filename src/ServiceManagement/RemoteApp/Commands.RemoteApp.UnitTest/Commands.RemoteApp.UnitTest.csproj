@@ -5,7 +5,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CA82D500-1940-4068-A076-D7A8AD459FB0}</ProjectGuid>
+    <ProjectGuid>{7C7123E7-109B-439D-BDDB-E00A51C4EEAD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Azure.Commands.RemoteApp.Tests</RootNamespace>
