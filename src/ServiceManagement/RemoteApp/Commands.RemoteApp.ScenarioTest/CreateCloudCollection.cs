@@ -23,7 +23,7 @@ namespace Microsoft.WindowsAzure.Commands.ScenarioTest.RemoteAppTests
                 Collection<T> result = new Collection<T>();
                 EnvironmentSetupHelper helper = new EnvironmentSetupHelper();
 
-                modules = Directory.GetFiles(@"..\..\..\Resources\Scripts", "*.ps1").ToList();
+                modules = Directory.GetFiles(@"..\..\Scripts", "*.ps1").ToList();
                 helper.SetupSomeOfManagementClients();
                 helper.SetupEnvironment(AzureModule.AzureServiceManagement);
                 helper.SetupModules(AzureModule.AzureServiceManagement, modules.ToArray());
