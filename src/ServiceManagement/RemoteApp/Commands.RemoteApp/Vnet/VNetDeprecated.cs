@@ -11,8 +11,8 @@ namespace Microsoft.WindowsAzure.Management.RemoteApp.Cmdlets
     {
         protected override void ProcessRecord()
         {
-            string message = String.Format("This cmdlet {0} has been deprecated. See x {1}",
-                this.GetType().Name, "https://azure.microsoft.com/en-us/documentation/articles/remoteapp-migratevnet/");
+            string message = String.Format("The cmdlet {0} has been deprecated. See {1}",
+                this.GetType().Name, "https://azure.microsoft.com/documentation/articles/remoteapp-migratevnet/");
             throw new RemoteAppServiceException(message, ErrorCategory.InvalidOperation);
         }
     }
