@@ -185,13 +185,17 @@ namespace Microsoft.WindowsAzure.Management.RemoteApp.Cmdlets
                         details.Region = Location;
                     }
 
-                    details.AdInfo = new ActiveDirectoryConfig()
+                    if (!String.IsNullOrWhiteSpace(Domain) && !String.IsNullOrWhiteSpace(OrganizationalUnit) && creds != null)
                     {
-                        DomainName = Domain,
-                        OrganizationalUnit = OrganizationalUnit,
-                        UserName = creds.UserName,
-                        Password = creds.Password,
-                    };
+                        details.AdInfo = new ActiveDirectoryConfig()
+                        {
+                            DomainName = Domain,
+                            OrganizationalUnit = OrganizationalUnit,
+                            UserName = creds.UserName,
+                            Password = creds.Password,
+                        };
+                    }
+
                     break;
                 }
                 case NoDomain:
