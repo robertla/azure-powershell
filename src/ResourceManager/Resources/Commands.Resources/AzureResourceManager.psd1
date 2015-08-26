@@ -105,7 +105,8 @@ NestedModules = @(
 	'.\HDInsight\Microsoft.Azure.Commands.HDInsight.dll',
     '.\ApiManagement\Microsoft.Azure.Commands.ApiManagement.ServiceManagement.dll',  
     '.\AzureBackup\Microsoft.Azure.Commands.AzureBackup.dll',
-    '.\SiteRecovery\Microsoft.Azure.Commands.SiteRecovery.dll'
+    '.\SiteRecovery\Microsoft.Azure.Commands.SiteRecovery.dll',
+	'.\RemoteApp\Microsoft.Azure.Commands.RemoteApp.dll'
 )  
   
 # Functions to export from this module  
