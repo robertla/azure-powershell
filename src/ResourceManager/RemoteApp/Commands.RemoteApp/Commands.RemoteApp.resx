@@ -120,6 +120,12 @@
   <data name="AccountNotFoundBySubscriptionId" xml:space="preserve">
     <value>RemoteApp account not found</value>
   </data>
+  <data name="ApplicationExists" xml:space="preserve">
+    <value>An application with this alias already exists.</value>
+  </data>
+  <data name="ApplicationNotFound" xml:space="preserve">
+    <value>No application with this alias exists.</value>
+  </data>
   <data name="CollectionNotFoundByNameFormat" xml:space="preserve">
     <value>RemoteApp collection name: {0} not found</value>
   </data>

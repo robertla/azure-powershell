@@ -152,6 +152,7 @@
     <Compile Include="RemoteApplications\GetAzureRemoteAppProgram.cs" />
     <Compile Include="RemoteApplications\GetStartMenuProgram.cs" />
     <Compile Include="RemoteApplications\PublishAzureRemoteAppProgram.cs" />
+    <Compile Include="RemoteApplications\ModifyAzureRemoteAppProgram.cs" />
     <Compile Include="RemoteApplications\UnpublishAzureRemoteAppProgram.cs" />
     <Compile Include="SecurityPrincipals\AddAzureRemoteAppUser.cs" />
     <Compile Include="SecurityPrincipals\GetAzureRemoteAppUser.cs" />
