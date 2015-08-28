@@ -70,6 +70,24 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An application with this alias already exists..
+        /// </summary>
+        internal static string ApplicationExists {
+            get {
+                return ResourceManager.GetString("ApplicationExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No application with this alias exists..
+        /// </summary>
+        internal static string ApplicationNotFound {
+            get {
+                return ResourceManager.GetString("ApplicationNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RemoteApp collection name: {0} not found.
         /// </summary>
         internal static string CollectionNotFoundByNameFormat {
@@ -104,17 +122,5 @@ namespace Microsoft.Azure.Commands.RemoteApp {
                 return ResourceManager.GetString("SessionNotFoundByUserUpnFormat", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Update collection.
-        /// </summary>
-        internal static string UpdateCollection
-        {
-            get
-            {
-                return ResourceManager.GetString("UpdateCollection", resourceCulture);
-            }
-        }
-
     }
 }
