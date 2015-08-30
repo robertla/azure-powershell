@@ -87,7 +87,10 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {
                 ResourceGroupName = ResourceGroupName,
                 Location = collection.Location,
-                CollectionCreationDetailsWrapperName = CollectionName
+                CollectionCreationDetailsWrapperName = CollectionName,
+                BillingPlanName = collection.BillingPlanName,
+                TemplateImageName = collection.TemplateImageName,
+                Region = collection.Location
             };
             if (Credential != null)
             {

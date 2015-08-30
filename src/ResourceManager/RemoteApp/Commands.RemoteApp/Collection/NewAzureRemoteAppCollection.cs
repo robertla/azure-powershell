@@ -16,6 +16,8 @@ using Microsoft.Azure.Commands.RemoteApp;
 using Microsoft.Azure.Management.RemoteApp.Models;
 using Microsoft.Azure.Management.Network;
 using Microsoft.Azure.Management.Network.Models;
+using Microsoft.Azure.Common.Authentication.Models; 
+using Microsoft.Azure.Common.Authentication; 
 using System;
 using System.Net;
 using System.Collections.Generic;
@@ -25,15 +27,6 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    /*class SubscriptionIdCredential : SubscriptionCloudCredentials
-    {
-        public override string SubscriptionId { get; }
-        public SubscriptionIdCredential(string subscriptionId)
-        {
-            this.SubscriptionId;
-        }
-    }*/
-
     [Cmdlet(VerbsCommon.New, "AzureRemoteAppCollection", DefaultParameterSetName = NoDomain), OutputType(typeof(CollectionCreationDetailsWrapper))]
     public class NewAzureRemoteAppCollection : RemoteAppArmResourceCmdletBase
     {
@@ -161,7 +154,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 Tags = new Dictionary<string, string>(),
                 ResourceGroupName = ResourceGroupName
             };
-            /*
+            
             switch (ParameterSetName)
             {
                 case DomainJoined:
@@ -198,7 +191,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                         createDetails.Region = Location;
                         break;
                     }
-            }*/
+            }
 
             CollectionCreationDetailsWrapper response = RemoteAppClient.CreateOrUpdateCollection(ResourceGroupName, CollectionName, createDetails);
 
@@ -208,7 +201,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             }
         }
 
-      /*  private bool ValidateCustomerVNetParams(string name, string subnet)
+        private bool ValidateCustomerVNetParams(string name, string subnet)
         {
             
 
@@ -254,8 +247,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
         private VirtualNetwork GetAzureVNet(string name)
         {
-            SubscriptionCloudCredentials userCredentials = new SubscriptionIdCredential(this.RemoteAppClient.GetSubscriptionId());
-            NetworkResourceProviderClient networkClient = new NetworkResourceProviderClient(userCredentials, RemoteAppClient.GetBaseUri());
+            NetworkResourceProviderClient networkClient = AzureSession.ClientFactory.CreateClient<NetworkResourceProviderClient>(Profile.Context, AzureEnvironment.Endpoint.ResourceManager);
             Task<VirtualNetworkListResponse> listNetworkTask = networkClient.VirtualNetworks.ListAsync(ResourceGroupName);
 
             listNetworkTask.Wait();
@@ -274,7 +266,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             }
             
             return null;
-        }*/
+        }
 
     }
 }
