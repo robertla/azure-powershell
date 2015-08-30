@@ -8,9 +8,9 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
     {
         internal IList<SecurityPrincipalInfo> GetUsers(string ResourceGroupName, string collectionName)
         {
-            SecurityPrincipalInfoListResult response = Client.Collection.GetUsers(collectionName, ResourceGroupName);
+            IList<SecurityPrincipalInfo> response = Client.Collection.GetUsers(collectionName, ResourceGroupName).Value;
 
-            return response.UserConsentStatuses;
+            return response;
         }
 
         internal SecurityPrincipalOperationErrorDetails AddUser(string ResourceGroupName, string collectionName, SecurityPrincipal userToAdd)

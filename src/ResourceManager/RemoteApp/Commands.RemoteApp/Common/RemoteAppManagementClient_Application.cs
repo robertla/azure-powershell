@@ -14,12 +14,12 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
 
         internal IList<PublishedApplicationDetails> GetApplications(string resourceGroupName, string collectionName)
         {
-            return Client.Collection.ListPublishedApp(collectionName, resourceGroupName);
+            return Client.Collection.ListPublishedApp(collectionName, resourceGroupName).Value;
         }
 
         internal IList<StartMenuApplication> GetStartMenuApps(string resourceGroupName, string collectionName)
         {
-            return Client.Collection.ListStartMenuApps(collectionName, resourceGroupName);
+            return Client.Collection.ListStartMenuApps(collectionName, resourceGroupName).Value;
         }
 
         internal StartMenuApplication GetStartMenuApp(string resourceGroupName, string collectionName, string applicationId)

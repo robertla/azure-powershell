@@ -27,7 +27,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
     {
         public override void ExecuteCmdlet()
         {
-            IEnumerable<Location> locations = RemoteAppClient.GetLocations();
+            IEnumerable<Location> locations = RemoteAppClient.GetAccount().LocationList;
 
             if (locations != null && locations.Any<Location>())
             {

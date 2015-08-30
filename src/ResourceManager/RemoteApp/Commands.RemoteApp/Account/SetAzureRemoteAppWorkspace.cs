@@ -44,8 +44,9 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             bool exists = false;
 
             AccountDetailsWrapper accountInfo = new AccountDetailsWrapper();
-            accountInfo.PrivacyUrl = PrivacyUrl;
-            accountInfo.WorkspaceName = WorkspaceName;
+            accountInfo.AccountInfo = new AccountDetails();
+            accountInfo.AccountInfo.PrivacyUrl = PrivacyUrl;
+            accountInfo.AccountInfo.WorkspaceName = WorkspaceName;
 
             exists = RemoteAppClient.SetAccount(accountInfo);
 
