@@ -14,15 +14,13 @@
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    public abstract partial class  RemoteAppArmResourceCmdletBase
+    public abstract partial class  RemoteAppArmCmdletBase
     {
         protected const string NameValidatorStringWithWildCards = @"^[?*A-Za-z0-9\u007F-\uFFFF]{1,13}$";
 
-        protected const string YearValidatorString = @"^[0-9]{4}$";
-
-        protected const string MonthValidatorString = @"^[0-9]{2}$";
-
         protected const string NameValidatorString = @"^[A-Za-z][A-Za-z0-9\u007F-\uFFFF]{2,12}$";
+
+        protected const string ResourceGroupValidatorString = @"^[a-zA-Z0-9-_().]{1,80}$";
 
         protected const string VNetNameValidatorStringWithWildCards = @"^[?*A-Za-z][?*-A-Za-z0-9]{3,49}(?<!-)$";
 

@@ -43,7 +43,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             ValueFromPipelineByPropertyName = true,
             HelpMessage = "Month to get collection usage for in MM format.")]
         [Alias("Month")]
-        [ValidatePattern(MonthValidatorString)]
+        [ValidatePattern(TwoDigitMonthPattern)]
         public string UsageMonth { get; set; }
 
         [Parameter(
@@ -52,7 +52,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             ValueFromPipelineByPropertyName = true,
             HelpMessage = "Year to get collection usage for in YYYY format.")]
         [Alias("Year")]
-        [ValidatePattern(YearValidatorString)]
+        [ValidatePattern(FullYearPattern)]
         public string UsageYear { get; set; }
 
         public override void ExecuteRemoteAppCmdlet()

@@ -41,7 +41,16 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
 
         internal IEnumerable<Collection> ListCollections(string groupName)
         {
-            CollectionListResult response = Client.Collection.ListResourceGroupCollections(groupName);
+            CollectionListResult response = null;
+
+            if (String.IsNullOrEmpty(groupName))
+            {
+                response = Client.Collection.ListCollections();
+            }
+            else
+            {
+                response = Client.Collection.ListResourceGroupCollections(groupName);
+            }
 
             return response.Value;
         }
@@ -107,8 +116,11 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
             {
                 accountExists = true;
 
-                if (!((details.AccountInfo.WorkspaceName == accountInfo.AccountInfo.WorkspaceName) && (details.AccountInfo.PrivacyUrl == accountInfo.AccountInfo.PrivacyUrl)))
+                if (!(String.Equals(details.AccountInfo.WorkspaceName, accountInfo.AccountInfo.WorkspaceName) && String.Equals(details.AccountInfo.PrivacyUrl, accountInfo.AccountInfo.PrivacyUrl)))
                 {
+                    accountInfo.Location = details.Location;
+                    accountInfo.Tags = new Dictionary<string, string>();
+
                     if (String.IsNullOrEmpty(accountInfo.AccountInfo.WorkspaceName))
                     {
                         accountInfo.AccountInfo.WorkspaceName = details.AccountInfo.WorkspaceName;
@@ -119,23 +131,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
                         accountInfo.AccountInfo.PrivacyUrl = details.AccountInfo.PrivacyUrl;
                     }
 
-                    AccountDetailsWrapper accountUpdate = new AccountDetailsWrapper
-                    {
-                        Location = details.Location,
-                        AccountInfo = new AccountDetails
-                        {
-                            IsDesktopEnabled = details.AccountInfo.IsDesktopEnabled,
-                            MaxPublishedAppsPerService = details.AccountInfo.MaxPublishedAppsPerService,
-                            MaxServices = details.AccountInfo.MaxServices,
-                            MaxUsersPerService = details.AccountInfo.MaxUsersPerService,
-                            PrivacyUrl = details.AccountInfo.PrivacyUrl,
-                            RdWebUrl = details.AccountInfo.RdWebUrl,
-                            WorkspaceName = details.AccountInfo.WorkspaceName,
-                        },
-                        Tags = new Dictionary<string, string>()
-                    };
-
-                    Client.Account.UpdateAccount(accountUpdate);
+                    Client.Account.UpdateAccount(accountInfo);
                 }
             }
             return accountExists;

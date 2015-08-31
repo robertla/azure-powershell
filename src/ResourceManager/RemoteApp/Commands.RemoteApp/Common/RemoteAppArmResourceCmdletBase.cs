@@ -53,8 +53,8 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             Mandatory = true, 
             ValueFromPipelineByPropertyName = true, 
             HelpMessage = "The resource group name.")]
-        [ValidateNotNullOrEmpty]
-        public string ResourceGroupName { get; set; }
+        [ValidatePattern(ResourceGroupValidatorString)]
+        public virtual string ResourceGroupName { get; set; }
 
         public abstract void ExecuteRemoteAppCmdlet();
 
@@ -62,7 +62,6 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         {
             try
             {
-                Requires.Argument("ResourceGroupName", this.ResourceGroupName).NotNull();
                 this.ExecuteRemoteAppCmdlet();
             }
             catch (CloudException)
