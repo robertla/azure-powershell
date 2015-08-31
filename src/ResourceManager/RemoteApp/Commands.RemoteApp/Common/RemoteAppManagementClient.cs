@@ -65,6 +65,27 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
             Client.Collection.Delete(collectionName, ResourceGroupName);
         }
 
+        internal CollectionUsageSummary GetCollectionUsageForUser(string usageMonth, string usageYear, string collectionName, string userUpn, string resourceGroupName)
+        {
+            return Client.Collection.GetUsageSummary(usageMonth, usageYear, collectionName, userUpn, resourceGroupName);
+        }
+
+        internal CollectionUsageSummaryList GetCollectionUsage(string usageMonth, string usageYear, string collectionName, string resourceGroupName)
+        {
+            return Client.Collection.GetUsageSummaryList(usageMonth, usageYear, collectionName, resourceGroupName);
+        }
+
+        internal UsageDetailsInfo GetCollectionUsageDetails(string usageMonth, string usageYear, string collectionName, string resourceGroupName)
+        {
+            BillingDate date = new BillingDate
+            {
+                Year = usageYear,
+                Month = usageMonth
+            };
+
+            return Client.Collection.GetUsageDetails(collectionName, resourceGroupName, date);
+        }
+
         #endregion
 
         #region Accounts
