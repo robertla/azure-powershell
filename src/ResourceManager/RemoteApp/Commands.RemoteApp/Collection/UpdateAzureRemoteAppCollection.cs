@@ -60,7 +60,8 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             details = new CollectionCreationDetailsWrapper()
             {      
                 TemplateImageName = ImageName,
-                WaitBeforeShutdownInMinutes = ForceLogoffWhenUpdateComplete ? -1 : 0
+                WaitBeforeShutdownInMinutes = ForceLogoffWhenUpdateComplete ? -1 : 0,
+                Location = collection.Location
             };
 
             if (ShouldProcess(CollectionName, Commands_RemoteApp.UpdateCollection))

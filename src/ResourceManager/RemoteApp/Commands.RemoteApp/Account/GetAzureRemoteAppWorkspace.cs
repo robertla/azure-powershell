@@ -29,7 +29,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
             if (account != null)
             {
-                var update = new { ClientUrl = account.RdWebUrl, EndUserFeedName = account.WorkspaceName };
+                var update = new { ClientUrl = account.AccountInfo.RdWebUrl, EndUserFeedName = account.AccountInfo.WorkspaceName };
 
                 WriteObject(update);
             }

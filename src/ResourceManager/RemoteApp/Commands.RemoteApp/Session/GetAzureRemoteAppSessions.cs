@@ -53,14 +53,14 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
             if (ExactMatch)
             {
-                List<SessionListItemProperties> sessions = RemoteAppClient.GetSessionList(ResourceGroupName, 
+                List<Session> sessions = RemoteAppClient.GetSessionList(ResourceGroupName,
                     CollectionName).ToList();
 
                 if (sessions != null)
                 {
                     if (UserUpn != null)
                     {
-                        foreach (SessionListItemProperties session in sessions)
+                        foreach (Session session in sessions)
                         {
                             if (session.UserUpn == UserUpn)
                             {

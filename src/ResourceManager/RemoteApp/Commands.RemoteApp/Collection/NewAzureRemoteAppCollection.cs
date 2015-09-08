@@ -12,13 +12,18 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
+using Microsoft.Azure.Commands.RemoteApp;
 using Microsoft.Azure.Management.RemoteApp.Models;
 using Microsoft.Azure.Management.Network;
 using Microsoft.Azure.Management.Network.Models;
+using Microsoft.Azure.Common.Authentication.Models; 
+using Microsoft.Azure.Common.Authentication; 
 using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Management.Automation;
-using Microsoft.Azure.Commands.RemoteApp;
+using System.Threading.Tasks;
+
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
@@ -130,8 +135,13 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         )]
         public CollectionMode? ResourceType { get; set; }
 
+
+        private Collection errorCollection = new Collection();
+
+
         public override void ExecuteRemoteAppCmdlet()
         {
+            NetworkCredential creds = null;
             CollectionCreationDetailsWrapper createDetails = new CollectionCreationDetailsWrapper(){
                 CollectionCreationDetailsWrapperName = CollectionName,
                 TemplateImageName = ImageName,
@@ -144,6 +154,44 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 Tags = new Dictionary<string, string>(),
                 ResourceGroupName = ResourceGroupName
             };
+            
+            switch (ParameterSetName)
+            {
+                case DomainJoined:
+                case AzureVNet:
+                    {
+                        creds = Credential.GetNetworkCredential();
+                        createDetails.VnetName = VNetName;
+
+                        if (SubnetName != null)
+                        {
+                            createDetails.SubnetName = SubnetName;
+                            ValidateCustomerVNetParams(createDetails.VnetName, createDetails.SubnetName);
+
+                            if (DnsServers != null)
+                            {
+                                createDetails.DnsServers = DnsServers.Split(new char[] { ',' });
+                            }
+
+                            createDetails.Region = Location;
+                        }
+
+                        createDetails.AdInfo = new ActiveDirectoryConfig()
+                        {
+                            DomainName = Domain,
+                            OrganizationalUnit = OrganizationalUnit,
+                            ServiceAccountUserName = creds.UserName,
+                            ServiceAccountPassword = creds.Password,
+                        };
+                        break;
+                    }
+                case NoDomain:
+                default:
+                    {
+                        createDetails.Region = Location;
+                        break;
+                    }
+            }
 
             CollectionCreationDetailsWrapper response = RemoteAppClient.CreateOrUpdateCollection(ResourceGroupName, CollectionName, createDetails);
 
@@ -151,6 +199,73 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {
                 WriteObject(response);
             }
+        }
+
+        private bool ValidateCustomerVNetParams(string name, string subnet)
+        {
+            
+
+            VirtualNetwork azureVNet = GetAzureVNet(name);
+            bool isValidSubnetName = false;
+            if (azureVNet == null)
+            {
+                ErrorRecord er = RemoteAppCollectionErrorState.CreateErrorRecordFromString(
+                                        String.Format(Commands_RemoteApp.InvalidArgumentVNetNameNotFoundMessageFormat, name),
+                                        String.Empty,
+                                        errorCollection,
+                                        ErrorCategory.InvalidArgument
+                                        );
+
+                ThrowTerminatingError(er);
+            }
+
+            foreach (Subnet azureSubnet in azureVNet.Subnets)
+            {
+                if (string.Compare(azureSubnet.Name, subnet, true) == 0)
+                {
+                    isValidSubnetName = true;
+
+                    Location = azureVNet.Location;
+                    break;
+                }
+            }
+
+            if (!isValidSubnetName)
+            {
+                ErrorRecord er = RemoteAppCollectionErrorState.CreateErrorRecordFromString(
+                                        String.Format(Commands_RemoteApp.InvalidArgumentSubNetNameNotFoundMessageFormat, subnet),
+                                        String.Empty,
+                                        errorCollection,
+                                        ErrorCategory.InvalidArgument
+                                        );
+
+                ThrowTerminatingError(er);
+            }
+
+            return isValidSubnetName;
+        }
+
+        private VirtualNetwork GetAzureVNet(string name)
+        {
+            NetworkResourceProviderClient networkClient = AzureSession.ClientFactory.CreateClient<NetworkResourceProviderClient>(Profile.Context, AzureEnvironment.Endpoint.ResourceManager);
+            Task<VirtualNetworkListResponse> listNetworkTask = networkClient.VirtualNetworks.ListAsync(ResourceGroupName);
+
+            listNetworkTask.Wait();
+
+            if (listNetworkTask.Status == TaskStatus.RanToCompletion)
+            {
+                VirtualNetworkListResponse networkList = listNetworkTask.Result;
+
+                foreach (VirtualNetwork network in networkList.VirtualNetworks)
+                {
+                    if (network.Name == name)
+                    {
+                        return network;
+                    }
+                }
+            }
+            
+            return null;
         }
 
     }

@@ -2,6 +2,7 @@
 using Microsoft.Azure.Common.Authentication.Models;
 using Microsoft.Azure.Management.RemoteApp;
 using Microsoft.Azure.Management.RemoteApp.Models;
+using Microsoft.Rest;
 using Microsoft.WindowsAzure.Commands.ServiceManagement.Model;
 using System;
 using System.Collections.Generic;
@@ -26,13 +27,23 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
             Client.ArmNamespace = DefaultRemoteAppArmNamespace;
         }
 
+        internal string GetSubscriptionId()
+        {
+            return Client.SubscriptionId;
+        }
+
+        internal Uri GetBaseUri()
+        {
+            return Client.BaseUri;
+        }
+
         #region Collections
 
         internal IEnumerable<Collection> ListCollections(string groupName)
         {
-            IEnumerable<Collection> response = Client.Collection.ListResourceGroupCollections(groupName);
+            CollectionListResult response = Client.Collection.ListResourceGroupCollections(groupName);
 
-            return response;
+            return response.Value;
         }
 
         internal Collection Get(string ResourceGroupName, string collectionName)
@@ -45,8 +56,6 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
         internal CollectionCreationDetailsWrapper CreateOrUpdateCollection(string ResourceGroupName, string collectionName, CollectionCreationDetailsWrapper createDetails)
         {
             CollectionCreationDetailsWrapper response = Client.Collection.CreateOrUpdate(createDetails, collectionName, ResourceGroupName);
-
-
 
             return response;
         }
@@ -62,56 +71,46 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
 
         internal AccountDetailsWrapper GetAccount()
         {
-            AccountDetailsWrapper response = Client.Account.GetAccountInfo();
+            AccountDetailsWrapper response = Client.Account.GetAccountInfo().Value.FirstOrDefault();
 
             return response;
-        }
-        internal IEnumerable<Microsoft.Azure.Management.RemoteApp.Models.Location> GetLocations()
-        {
-            LocationPropertiesWrapper response = Client.Account.Locations();
-
-            return response.Locations;
-        }
-
-        internal IEnumerable<BillingPlan> GetBillingPlans()
-        {
-            BillingPlanPropertiesWrapper response = Client.Account.Plans();
-
-            return response.Plans;
         }
 
         internal bool SetAccount(AccountDetailsWrapper accountInfo)
         {
             bool accountExists = false;
 
-            AccountDetailsWrapper details = Client.Account.GetAccountInfo();
+            AccountDetailsWrapper details = Client.Account.GetAccountInfo().Value.FirstOrDefault();
 
             if (details != null)
             {
                 accountExists = true;
 
-                if (!((details.WorkspaceName == accountInfo.WorkspaceName) && (details.PrivacyUrl == accountInfo.PrivacyUrl)))
+                if (!((details.AccountInfo.WorkspaceName == accountInfo.AccountInfo.WorkspaceName) && (details.AccountInfo.PrivacyUrl == accountInfo.AccountInfo.PrivacyUrl)))
                 {
-                    if (String.IsNullOrEmpty(accountInfo.WorkspaceName))
+                    if (String.IsNullOrEmpty(accountInfo.AccountInfo.WorkspaceName))
                     {
-                        accountInfo.WorkspaceName = details.WorkspaceName;
+                        accountInfo.AccountInfo.WorkspaceName = details.AccountInfo.WorkspaceName;
                     }
 
-                    if (accountInfo.PrivacyUrl == null)
+                    if (accountInfo.AccountInfo.PrivacyUrl == null)
                     {
-                        accountInfo.PrivacyUrl = details.PrivacyUrl;
+                        accountInfo.AccountInfo.PrivacyUrl = details.AccountInfo.PrivacyUrl;
                     }
 
                     AccountDetailsWrapper accountUpdate = new AccountDetailsWrapper
                     {
                         Location = details.Location,
-                        IsDesktopEnabled = details.IsDesktopEnabled,
-                        MaxPublishedAppsPerService = details.MaxPublishedAppsPerService,
-                        MaxServices = details.MaxServices,
-                        MaxUsersPerService = details.MaxUsersPerService,
-                        PrivacyUrl = details.PrivacyUrl,
-                        RdWebUrl = details.RdWebUrl,
-                        WorkspaceName = details.WorkspaceName,
+                        AccountInfo = new AccountDetails
+                        {
+                            IsDesktopEnabled = details.AccountInfo.IsDesktopEnabled,
+                            MaxPublishedAppsPerService = details.AccountInfo.MaxPublishedAppsPerService,
+                            MaxServices = details.AccountInfo.MaxServices,
+                            MaxUsersPerService = details.AccountInfo.MaxUsersPerService,
+                            PrivacyUrl = details.AccountInfo.PrivacyUrl,
+                            RdWebUrl = details.AccountInfo.RdWebUrl,
+                            WorkspaceName = details.AccountInfo.WorkspaceName,
+                        },
                         Tags = new Dictionary<string, string>()
                     };
 
@@ -130,9 +129,9 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
 
         #region Sessions
 
-        internal IEnumerable<SessionListItemProperties> GetSessionList(string resourceGroupName, string collectionName)
+        internal IEnumerable<Session> GetSessionList(string resourceGroupName, string collectionName)
         {
-            IEnumerable<SessionListItemProperties> response = Client.Collection.SessionList(collectionName, resourceGroupName).Sessions;
+            IEnumerable<Session> response = Client.Collection.SessionList(collectionName, resourceGroupName).Value;
 
             return response;
         }
