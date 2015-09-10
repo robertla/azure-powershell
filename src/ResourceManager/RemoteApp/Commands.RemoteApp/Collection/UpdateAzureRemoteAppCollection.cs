@@ -61,7 +61,8 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {      
                 TemplateImageName = ImageName,
                 WaitBeforeShutdownInMinutes = ForceLogoffWhenUpdateComplete ? -1 : 0,
-                Location = collection.Location
+                Location = collection.Location,
+                CollectionCreationDetailsWrapperName = collection.Name
             };
 
             if (ShouldProcess(CollectionName, Commands_RemoteApp.UpdateCollection))

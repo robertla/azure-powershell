@@ -61,6 +61,15 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AdInfo cannot be added to a CloudOnly Collection.
+        /// </summary>
+        internal static string AadInfoCanNotBeAddedToCloudOnlyCollectionMessage {
+            get {
+                return ResourceManager.GetString("AadInfoCanNotBeAddedToCloudOnlyCollectionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RemoteApp account not found.
         /// </summary>
         internal static string AccountNotFoundBySubscriptionId {
@@ -97,6 +106,33 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid Argument SubnetName: {0} not found..
+        /// </summary>
+        internal static string InvalidArgumentSubNetNameNotFoundMessageFormat {
+            get {
+                return ResourceManager.GetString("InvalidArgumentSubNetNameNotFoundMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to InvalidArgument VNetName: {0} not found..
+        /// </summary>
+        internal static string InvalidArgumentVNetNameNotFoundMessageFormat {
+            get {
+                return ResourceManager.GetString("InvalidArgumentVNetNameNotFoundMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;Link Azure Vnet&quot; Feature not enabled.
+        /// </summary>
+        internal static string LinkAzureVNetFeatureNotEnabledMessage {
+            get {
+                return ResourceManager.GetString("LinkAzureVNetFeatureNotEnabledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No billing plans found for RemoteApp account.
         /// </summary>
         internal static string NoBillingPlansFound {
@@ -122,59 +158,13 @@ namespace Microsoft.Azure.Commands.RemoteApp {
                 return ResourceManager.GetString("SessionNotFoundByUserUpnFormat", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to Update collection.
+        ///   Looks up a localized string similar to Update Collection.
         /// </summary>
-        internal static string UpdateCollection
-        {
-            get
-            {
+        internal static string UpdateCollection {
+            get {
                 return ResourceManager.GetString("UpdateCollection", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to AdInfo cannot be added to a ClouldOnly Collection.
-        /// </summary>
-        internal static string AadInfoCanNotBeAddedToCloudOnlyCollectionMessage
-        {
-            get
-            {
-                return ResourceManager.GetString("AadInfoCanNotBeAddedToCloudOnlyCollectionMessage", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid Argument SubnetName: {0} not found.
-        /// </summary>
-        internal static string InvalidArgumentSubNetNameNotFoundMessageFormat
-        {
-            get
-            {
-                return ResourceManager.GetString("InvalidArgumentSubNetNameNotFoundMessageFormat", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid Argument VNetName: {0} not found.
-        /// </summary>
-        internal static string InvalidArgumentVNetNameNotFoundMessageFormat
-        {
-            get
-            {
-                return ResourceManager.GetString("InvalidArgumentVNetNameNotFoundMessageFormat", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to &quot;Link Azure VNet&quot; Feature not enabled.
-        /// </summary>
-        internal static string LinkAzureVNetFeatureNotEnabledMessage
-        {
-            get
-            {
-                return ResourceManager.GetString("LinkAzureVNetFeatureNotEnabledMessage", resourceCulture);
             }
         }
     }
