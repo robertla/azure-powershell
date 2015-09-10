@@ -117,11 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AadInfoCanNotBeAddedToCloudOnlyCollectionMessage" xml:space="preserve">
+    <value>AdInfo cannot be added to a CloudOnly Collection</value>
+  </data>
   <data name="AccountNotFoundBySubscriptionId" xml:space="preserve">
     <value>RemoteApp account not found</value>
   </data>
   <data name="CollectionNotFoundByNameFormat" xml:space="preserve">
     <value>RemoteApp collection name: {0} not found</value>
+  </data>
+  <data name="InvalidArgumentSubNetNameNotFoundMessageFormat" xml:space="preserve">
+    <value>Invalid Argument SubnetName: {0} not found.</value>
+  </data>
+  <data name="InvalidArgumentVNetNameNotFoundMessageFormat" xml:space="preserve">
+    <value>InvalidArgument VNetName: {0} not found.</value>
+  </data>
+  <data name="LinkAzureVNetFeatureNotEnabledMessage" xml:space="preserve">
+    <value>"Link Azure Vnet" Feature not enabled</value>
   </data>
   <data name="NoBillingPlansFound" xml:space="preserve">
     <value>No billing plans found for RemoteApp account</value>
@@ -131,5 +143,8 @@
   </data>
   <data name="SessionNotFoundByUserUpnFormat" xml:space="preserve">
     <value>RemoteApp session with UserUpn: {0} not found</value>
+  </data>
+  <data name="UpdateCollection" xml:space="preserve">
+    <value>Update Collection</value>
   </data>
 </root>
