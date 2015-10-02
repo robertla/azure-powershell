@@ -71,7 +71,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                Alias = ApplicationAlias,
                AvailableToUsers = publishedApp.AvailableToUsers,
                CommandLineArguments = publishedApp.CommandLineArguments,
-               Name = publishedApp.Name
+               DisplayName = publishedApp.Name
             };
 
             if (CommandLine != null)
@@ -81,7 +81,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
             if (!String.IsNullOrWhiteSpace(DisplayName))
             {
-                appDetails.Name = DisplayName;
+                appDetails.DisplayName = DisplayName;
             }
 
             if (AvaliableToUsers.HasValue)

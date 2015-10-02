@@ -96,7 +96,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
             appDetails = new ApplicationDetails()
             {
-                Name = String.IsNullOrWhiteSpace(DisplayName) ? appName : DisplayName,
+                DisplayName = String.IsNullOrWhiteSpace(DisplayName) ? appName : DisplayName,
                 VirtualPath = appPath,
                 Alias = ApplicationAlias,
                 IconUri = iconURI,
