@@ -88,24 +88,6 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No application with this alias exists..
-        /// </summary>
-        internal static string ApplicationNotFound {
-            get {
-                return ResourceManager.GetString("ApplicationNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to RemoteApp collection name: {0} not found.
-        /// </summary>
-        internal static string CollectionNotFoundByNameFormat {
-            get {
-                return ResourceManager.GetString("CollectionNotFoundByNameFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Invalid Argument SubnetName: {0} not found..
         /// </summary>
         internal static string InvalidArgumentSubNetNameNotFoundMessageFormat {
@@ -131,7 +113,7 @@ namespace Microsoft.Azure.Commands.RemoteApp {
                 return ResourceManager.GetString("LinkAzureVNetFeatureNotEnabledMessage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No billing plans found for RemoteApp account.
         /// </summary>
@@ -140,7 +122,7 @@ namespace Microsoft.Azure.Commands.RemoteApp {
                 return ResourceManager.GetString("NoBillingPlansFound", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to No locations found for RemoteApp account.
         /// </summary>
@@ -149,7 +131,7 @@ namespace Microsoft.Azure.Commands.RemoteApp {
                 return ResourceManager.GetString("NoLocationsFound", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to RemoteApp session with UserUpn: {0} not found.
         /// </summary>
@@ -158,7 +140,7 @@ namespace Microsoft.Azure.Commands.RemoteApp {
                 return ResourceManager.GetString("SessionNotFoundByUserUpnFormat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Update Collection.
         /// </summary>
