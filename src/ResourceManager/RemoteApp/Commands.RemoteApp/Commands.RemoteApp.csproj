@@ -127,6 +127,8 @@
     <Compile Include="Account\GetAzureRemoteAppLocation.cs" />
     <Compile Include="Account\SetAzureRemoteAppWorkspace.cs" />
     <Compile Include="Account\SetAzureRemoteAppAccountBilling.cs" />
+    <Compile Include="Collection\GetAzureRemoteAppCollectionUsageDetails.cs" />
+    <Compile Include="Collection\GetAzureRemoteAppCollectionUsageSummary.cs" />
     <Compile Include="Collection\NewAzureRemoteAppCollection.cs" />
     <Compile Include="Collection\RemoveAzureRemoteAppCollection.cs" />
     <Compile Include="Collection\SetAzureRemoteAppCollection.cs" />

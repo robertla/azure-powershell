@@ -26,6 +26,14 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
     {
         [Parameter(
             Mandatory = false,
+            Position = 0,
+            ValueFromPipelineByPropertyName = true,
+            HelpMessage = "RemoteApp resource group name")]
+        [ValidatePattern(ResourceGroupValidatorString)]
+        public override string ResourceGroupName { get; set; }
+
+        [Parameter(
+            Mandatory = false,
             Position = 1,
             ValueFromPipelineByPropertyName = true,
             HelpMessage = "RemoteApp collection name. Wildcards are permitted.")]
