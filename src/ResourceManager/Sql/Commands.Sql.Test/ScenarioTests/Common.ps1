@@ -61,8 +61,9 @@ Creates the test environment needed to perform the Sql auditing tests
 #>
 function Create-TestEnvironmentWithParams ($params)
 {
-	Azure\New-AzureStorageAccount -StorageAccountName $params.storageAccount -Location "West US" 
-	New-AzureResourceGroup -Name $params.rgname -Location "West US" -TemplateFile ".\Templates\sql-audit-test-env-setup.json" -serverName $params.serverName -databaseName $params.databaseName -EnvLocation "West US" -Force
+	New-AzureRmResourceGroup -Name $params.rgname -Location "West US" -Force
+	New-AzureRmResourceGroupDeployment -ResourceGroupName $params.rgname -TemplateFile ".\Templates\sql-audit-test-env-setup.json" -serverName $params.serverName -databaseName $params.databaseName -EnvLocation "West US" -Force
+	New-AzureRmStorageAccount -Name $params.storageAccount -Location "West US" -ResourceGroupName $params.rgname -Type "Standard_GRS"
 }
 
 <#
@@ -72,8 +73,9 @@ Creates the test environment needed to perform the Sql auditing tests, while usi
 function Create-TestEnvironmentWithStorageV2 ($testSuffix)
 {
 	$params = Get-SqlAuditingTestEnvironmentParameters $testSuffix
-	New-AzureResourceGroup -Name $params.rgname -Location "West US" -TemplateFile ".\Templates\sql-audit-test-env-setup.json" -serverName $params.serverName -databaseName $params.databaseName -EnvLocation "West US" -Force
-	New-AzureStorageAccount -Name $params.storageAccount -Location "West US" -ResourceGroupName $params.rgname -Type "Standard_GRS"
+	New-AzureRmResourceGroup -Name $params.rgname -Location "West US" -Force
+	New-AzureRmResourceGroupDeployment -ResourceGroupName $params.rgname -TemplateFile ".\Templates\sql-audit-test-env-setup.json" -serverName $params.serverName -databaseName $params.databaseName -EnvLocation "West US" -Force
+	New-AzureRmStorageAccount -Name $params.storageAccount -Location "West US" -ResourceGroupName $params.rgname -Type "Standard_GRS"
 }
 
 <#
@@ -83,17 +85,22 @@ Creates the test environment needed to perform the Sql data masking tests
 function Create-DataMaskingTestEnvironment ($testSuffix)
 {
 	$params = Get-SqlDataMaskingTestEnvironmentParameters $testSuffix
-	New-AzureResourceGroup -Name $params.rgname -Location "Australia East" -TemplateFile ".\Templates\sql-ddm-test-env-setup.json" -serverName $params.serverName -databaseName $params.databaseName -EnvLocation "Australia East" -administratorLogin $params.userName -Force
+	New-AzureRmResourceGroup -Name $params.rgname -Location "Australia East" -Force
+	New-AzureRmResourceGroupDeployment -ResourceGroupName $params.rgname -TemplateFile ".\Templates\sql-ddm-test-env-setup.json" -serverName $params.serverName -databaseName $params.databaseName -EnvLocation "Australia East" -administratorLogin $params.userName -Force
 	$fullServerName = $params.serverName + ".database.windows.net"
+	
 	$uid = $params.userName
 	$pwd = $params.pwd
+		
 	$databaseName=$params.databaseName
 	$connectionString = "Server=$fullServerName;uid=$uid; pwd=$pwd;Database=$databaseName;Integrated Security=False;"
+
 	$connection = New-Object System.Data.SqlClient.SqlConnection
 	$connection.ConnectionString = $connectionString
 	try
 	{
 		$connection.Open()
+		
 		$table1 = $params.table1
 		$column1 = $params.column1
 		$columnInt = $params.columnInt
@@ -102,11 +109,10 @@ function Create-DataMaskingTestEnvironment ($testSuffix)
 		$column2 = $params.column2
 		$columnFloat = $params.columnFloat
 
-		$query = "CREATE TABLE $table1 ($column1 NVARCHAR(20)NOT NULL, $columnInt INT);CREATE TABLE $table2 ($column2 NVARCHAR(20)NOT NULL, $columnFloat DECIMAL(6,3));"
+		$query = "CREATE TABLE $table1 ($column1 NVARCHAR(20)NOT NULL, $columnInt INT);CREATE TABLE $table2 ($column2 NVARCHAR(20)NOT NULL, $columnFloat DECIMAL(6,3));CREATE USER $uid FOR LOGIN $uid;"
 		$command = $connection.CreateCommand()
-		$command.CommandText = $query
+		$command.CommandText = $query		
 		$command.ExecuteReader()
-		
 	}
 	catch
 	{
@@ -158,16 +164,14 @@ function Get-ElasticPoolName
 	.SYNOPSIS
 	Creates a resource group for tests
 #>
-function Create-ResourceGroupForTest ()
+function Create-ResourceGroupForTest ($location = "Japan East")
 {
-	$location = "Japan East"
 	$rgName = Get-ResourceGroupName
 	
-	$rg = New-AzureResourceGroup -Name $rgName -Location $location
+	$rg = New-AzureRmResourceGroup -Name $rgName -Location $location
 
 	return $rg
 }
-
 
 <#
 	.SYNOPSIS 
@@ -175,7 +179,7 @@ function Create-ResourceGroupForTest ()
 	#>
 function Remove-ResourceGroupForTest ($rg)
 {
-	Remove-AzureResourceGroup -Name $rg.ResourceGroupName -Force
+	Remove-AzureRmResourceGroup -Name $rg.ResourceGroupName -Force
 }
 
 <#
@@ -189,7 +193,7 @@ function Create-ServerForTest ($resourceGroup, $serverVersion = "12.0", $locatio
 	$serverPassword = "t357ingP@s5w0rd!"
 	$credentials = new-object System.Management.Automation.PSCredential($serverLogin, ($serverPassword | ConvertTo-SecureString -asPlainText -Force)) 
 	
-	$server = New-AzureSqlServer -ResourceGroupName  $resourceGroup.ResourceGroupName -ServerName $serverName -Location $location -ServerVersion $serverVersion -SqlAdministratorCredentials $credentials
+	$server = New-AzureRmSqlServer -ResourceGroupName  $resourceGroup.ResourceGroupName -ServerName $serverName -Location $location -ServerVersion $serverVersion -SqlAdministratorCredentials $credentials
 	return $server
 }
 
@@ -199,7 +203,7 @@ function Create-ServerForTest ($resourceGroup, $serverVersion = "12.0", $locatio
 #>
 function Remove-ServerForTest ($server)
 {
-	$server | Remove-AzureSqlServer -Force
+	$server | Remove-AzureRmSqlServer -Force
 }
 
 <#
@@ -211,7 +215,7 @@ function Remove-TestEnvironment ($testSuffix)
 	try
 	{
 	$params = Get-SqlAuditingTestEnvironmentParameters $testSuffix
-	Azure\Remove-AzureStorageAccount -StorageAccountName $params.storageAccount
+	Azure\Remove-AzureRmStorageAccount -StorageAccountName $params.storageAccount
 	}
 	catch
 	{

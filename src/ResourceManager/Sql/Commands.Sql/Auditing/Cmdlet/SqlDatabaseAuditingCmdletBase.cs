@@ -40,7 +40,7 @@ namespace Microsoft.Azure.Commands.Sql.Auditing.Cmdlet
         /// <returns>An initialized and ready to use ModelAdapter object</returns>
         protected override SqlAuditAdapter InitModelAdapter(AzureSubscription subscription)
         {
-            return new SqlAuditAdapter(Profile, subscription);
+            return new SqlAuditAdapter(DefaultProfile.Context);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Microsoft.Azure.Commands.Sql.Auditing.Cmdlet
         /// <param name="model">The model object with the data to be sent to the REST endpoints</param>
         protected override DatabaseAuditingPolicyModel PersistChanges(DatabaseAuditingPolicyModel model)
         {
-            ModelAdapter.SetDatabaseAuditingPolicy(model, clientRequestId);
+            ModelAdapter.SetDatabaseAuditingPolicy(model, clientRequestId, DefaultContext.Environment.Endpoints[AzureEnvironment.Endpoint.StorageEndpointSuffix]);
             return null;
         }
     }

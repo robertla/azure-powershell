@@ -1,3 +1,88 @@
+﻿* Azure Redis Cache
+  * Set-AzureRedisCache - Premium and vNet support for redis cache
+  * New-AzureRedisCache - Premium and vNet support for redis cache
+
+## 2015.10.09 version 1.0 preview
+* Azure Resource Manager Management Cmdlets
+  * New-AzureRmResourceGroup - Removed the template deployment parameters from this cmdlet. Template deployment will now be 
+  handled only through the New-AzureRmResourceGroupDeployment
+  * Get-AzureRmResource - Will query directly against the Resource Provider. Removed parameters for tags from here. New cmdlets added for querying against the cache as listed below.
+  * Get-AzureRmResourceGroup - Removed parameters for finding resources through tags. New cmdlet added for handling this   
+  functionality as mentioned below.
+  * Find-AzureRmResource - Query against the cache. 
+  * Find-AzureRmResourceGroup - Tag parameter added for querying resource group containing specific tags.
+  * Test-AzureResource - Cmdlet removed. Will be adding a better and reliable way to achieve this scenario which will be guaranteed to work against all Resource providers.
+  * Test-AzureResourceGroup - Cmdlet removed. Will be adding a better and reliable way to achieve this scenario.
+  * Get-AzureRmResourceProvider - This cmdlet has been renamed. Earlier it was called Get-AzureProvider. We have changed the output to include locations. Now you can use this to find out which providers and types are available for certain location.
+  * Cmdlets added for policy
+    * New-AzureRmPolicyDefinition, Get-AzureRmPolicyDefinition, Set-AzureRMPolicyDefinition, Remove-AzureRmPolicyDefinition
+    * New-AzureRmPolicyAssignment, Get-AzureRmPolicyAssignment, Set-AzureRmPolicyAssignment, Remove-AzureRmPolicyAssignment
+  * Consolidated Log cmdlets
+    * Removed Get-AzureResourceLog, Get-AzureResourceGroupLog, Get-AzureProviderLog
+    * Added new cmdlet Get-AzureLog which you can use to obtain logs at different scopes like resource group, resource, provider.
+  * Removed Get-AzureLocation - the functionality is now provided through the Get-AzureRmResourceProvider
+  
+## 2015.09.03 version 0.9.8
+* Azure Redis Cache cmdlets 
+  * New-AzureRMRedisCache - 'RedisVersion' parameter is deprecated.
+* Azure Compute (ARM) Cmdlets
+  * Added -Launch parameter for Get-AzureRemoteDesktopFile cmdlet
+  * Added Id parameter for VM cmdlets to support piping scenario without ResourceGroupName parameter
+  * Added Set-AzureVMDataDisk cmdlet
+  * Added Add-AzureVhd cmdlet
+  * Changed the output format of Get image cmdlets as a table
+  * Fixed Set-AzureVMAccessExtension cmdlet
+* Azure Compute (Service Management) cmdlets
+  * Exposed ComputeImageConfig in Get-AzurePlatformVMImage cmdlet
+  * Fixed Publish-AzurePlatformExtension and Set-AzurePlatformExtension cmdlets
+* Azure Backup - added the following cmdlets
+  * Backup-AzureRMBackupItem
+  * Register-AzureRMBackupContainer
+  * Disable-AzureRMBackupProtection
+  * Enable-AzureRMBackupProtection
+  * Get-AzureRMBackupItem
+  * Get-AzureRMBackupJob
+  * Get-AzureRMBackupJobDetails
+  * Stop-AzureRMBackupJob
+  * Wait-AzureRMBackupJob
+  * Get-AzureRMBackupProtectionPolicy
+  * New-AzureRMBackupProtectionPolicy
+  * New-AzureRMBackupRetentionPolicyObject
+  * Remove-AzureRMBackupProtectionPolicy
+  * Set-AzureRMBackupProtectionPolicy
+  * Get-AzureRMBackupRecoveryPoint
+  * Restore-AzureRMBackupItem
+* Azure Batch - added the following cmdlets
+  * Enable-AzureBatchJob
+  * Disable-AzureBatchJob
+  * Enable-AzureBatchJobSchedule
+  * Disable-AzureBatchJobSchedule
+  * Stop-AzureBatchJob
+  * Stop-AzureBatchJobSchedule
+  * Stop-AzureBatchTask
+* Azure Data Factory
+  * Update SDK reference to 3.0.0 to use API version 2015-09-01
+    * Imposes message size limits for all authoring types. Pipelines must be 200 KB or less in size and all others must be 30 KB or less. 
+    * TeradataLinkedService no longer accepts the obsolete properties "database" and "schema". 
+    * Obsolete copy-related properties are no longer returned from the service. 
+* Azure Sql (ARM) Cmdlets - added the following cmdlets
+  * Get-AzureSqlServerActiveDirectoryAdministrator
+  * Set-AzureSqlServerActiveDirectoryAdministrator
+  * Remove-AzureSqlServerActiveDirectoryAdministrator
+* SQL Server VM cmdlets (ARM)
+  * New-AzureVMSqlServerAutoPatchingConfig
+  * New-AzureVMSqlServerAutoBackupConfig
+  * Set-AzureVMSqlServerExtension
+  * Get-AzureVMSqlServerExtension
+  * Remove-AzureVMSqlServerExtension
+* Azure SQL Database Index Recommendation Cmdlets
+  * Get-AzureSqlDatabaseIndexRecommendations
+  * Start-AzureSqlDatabaseExecuteIndexRecommendation
+  * Stop-AzureSqlDatabaseExecuteIndexRecommendation
+* Azure SQL Database and Server Upgrade Hints Cmdlets
+  * Get-AzureSqlDatabaseUpgradeHint
+  * Get-AzureSqlServerUpgradeHint
+	
 ## 2015.08.17 version 0.9.7
 * Azure Profile cmdlets
   * New-AzureProfile
@@ -5,7 +90,7 @@
     * Fixed issues with AAD aithentication when constructing profile
     * Enabled passing results of Add-AzureEnvironment to New-AzureProfile -Environment parameter
 * Azure ResourceManager cmdlets
-  * New-AzureResourceGroupDeployment: Added DeploymentMode and Force parameters 
+  * New-AzureResourceGroupDeployment: Added Mode (deployment mode) and Force parameters 
   * Get-AzureProviderOperation: API changes to improve performance
 * Azure Compute (ARM) Cmdlets
   * Fixes for Set-AzureDeployment with -ExtensionConfiguration

@@ -28,6 +28,13 @@ namespace Microsoft.Azure.Commands.Compute.Test.ScenarioTests
 
         [Fact]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestVirtualMachinePiping()
+        {
+            ComputeTestController.NewInstance.RunPsTest("Test-VirtualMachinePiping");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
         public void TestLinuxVirtualMachine()
         {
             ComputeTestController.NewInstance.RunPsTest("Test-LinuxVirtualMachine");
@@ -77,6 +84,13 @@ namespace Microsoft.Azure.Commands.Compute.Test.ScenarioTests
 
         [Fact]
         [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestVirtualMachineDataDiskNegative()
+        {
+            ComputeTestController.NewInstance.RunPsTest("Test-VirtualMachineDataDiskNegative");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
         public void TestVirtualMachinePIRv2()
         {
             ComputeTestController.NewInstance.RunPsTest("Test-VirtualMachinePIRv2");
@@ -122,6 +136,13 @@ namespace Microsoft.Azure.Commands.Compute.Test.ScenarioTests
         public void TestVirtualMachineListWithPaging()
         {
             ComputeTestController.NewInstance.RunPsTest("Test-VirtualMachineListWithPaging");
+        }
+
+        [Fact]
+        [Trait(Category.AcceptanceType, Category.CheckIn)]
+        public void TestVirtualMachineWithDifferentStorageResource()
+        {
+            ComputeTestController.NewInstance.RunPsTest("Test-VirtualMachineWithDifferentStorageResource");
         }
     }
 }
