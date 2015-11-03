@@ -83,17 +83,14 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             else
             {
                 string result = null;
-                do
-                {
-                    Thread.Sleep(5000);
+                
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(detailsUsage.ExtraData);
+                HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
 
-                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create(detailsUsage.ExtraData);
-                    HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-
-                    StreamReader sr = new StreamReader(resp.GetResponseStream());
-                    result = sr.ReadToEnd();
-                    sr.Close();
-                } while (String.IsNullOrWhiteSpace(result));
+                StreamReader sr = new StreamReader(resp.GetResponseStream());
+                result = sr.ReadToEnd();
+                sr.Close();
+               
 
                 WriteObject(result);
             }
