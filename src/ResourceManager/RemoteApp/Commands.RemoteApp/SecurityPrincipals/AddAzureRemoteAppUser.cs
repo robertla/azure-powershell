@@ -42,7 +42,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         [ValidatePattern(UserPrincipalValdatorString)]
         public string UserUpn { get; set; }
 
-        public override void ExecuteRemoteAppCmdlet()
+        public override void ExecuteCmdlet()
         {
             SecurityPrincipalOperationErrorDetails response = null;
 

@@ -14,8 +14,6 @@
 
 using Microsoft.Azure.Management.RemoteApp.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
@@ -49,7 +47,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             HelpMessage = "Set to true if you want this application to be shown to users. Set to false if you wish to hide it.")]
         public bool? AvaliableToUsers { get; set; }
 
-        public override void ExecuteRemoteAppCmdlet()
+        public override void ExecuteCmdlet()
         {
             PublishedApplicationDetails publishedApp = null;
             PublishingOperationResult response = null;

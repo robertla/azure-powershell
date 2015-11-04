@@ -14,11 +14,8 @@
 
 using Microsoft.Azure.Management.RemoteApp.Models;
 using System;
-using System.Net;
-using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
-using Microsoft.Azure.Commands.RemoteApp;
+using System.Net;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
@@ -66,7 +63,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         [ValidateNotNull]
         public string CustomRdpProperty { get; set; }
 
-        public override void ExecuteRemoteAppCmdlet()
+        public override void ExecuteCmdlet()
         {
             NetworkCredential creds = null;
             CollectionCreationDetailsWrapper details = null;
@@ -87,10 +84,9 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {
                 ResourceGroupName = ResourceGroupName,
                 Location = collection.Location,
-                CollectionCreationDetailsWrapperName = CollectionName,
+                CollectionName = CollectionName,
                 BillingPlanName = collection.BillingPlanName,
                 TemplateImageName = collection.TemplateImageName,
-                Region = collection.Location
             };
             if (Credential != null)
             {

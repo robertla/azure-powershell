@@ -13,7 +13,6 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Management.RemoteApp.Models;
-using System.Collections.Generic;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {

@@ -1,13 +1,5 @@
-﻿using Microsoft.WindowsAzure.Commands.Utilities.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Azure.Management.RemoteApp;
+﻿using System;
 using System.Management.Automation;
-using Microsoft.Azure.Commands.RemoteApp.Common;
-using Hyak.Common;
-using System.Net;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
@@ -56,19 +48,6 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         [ValidatePattern(ResourceGroupValidatorString)]
         public virtual string ResourceGroupName { get; set; }
 
-        public abstract void ExecuteRemoteAppCmdlet();
-
-        public override void ExecuteCmdlet()
-        {
-            try
-            {
-                this.ExecuteRemoteAppCmdlet();
-            }
-            catch (CloudException)
-            {
-                // TODO: add code to display properly formatted error information here, if desired
-                throw;
-            }
-        }
+ 
     }
 }

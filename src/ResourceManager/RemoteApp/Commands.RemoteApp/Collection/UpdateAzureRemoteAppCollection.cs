@@ -13,11 +13,7 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Management.RemoteApp.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
-using Microsoft.Azure.Commands.RemoteApp;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
@@ -44,7 +40,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             HelpMessage = "Log off users immediately after the update has successfully completed")]
         public SwitchParameter ForceLogoffWhenUpdateComplete { get; set; }
 
-        public override void ExecuteRemoteAppCmdlet()
+        public override void ExecuteCmdlet()
         {
             CollectionCreationDetailsWrapper details = null;
             CollectionCreationDetailsWrapper response = null;
@@ -62,7 +58,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 TemplateImageName = ImageName,
                 WaitBeforeShutdownInMinutes = ForceLogoffWhenUpdateComplete ? -1 : 0,
                 Location = collection.Location,
-                CollectionCreationDetailsWrapperName = collection.Name
+                CollectionName = collection.Name
             };
 
             if (ShouldProcess(CollectionName, Commands_RemoteApp.UpdateCollection))

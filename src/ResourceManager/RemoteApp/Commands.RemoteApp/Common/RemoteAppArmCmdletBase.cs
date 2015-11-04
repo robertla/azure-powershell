@@ -1,13 +1,13 @@
-﻿using Microsoft.WindowsAzure.Commands.Utilities.Common;
-using Microsoft.Azure.Management.RemoteApp.Models;
+﻿using Hyak.Common;
 using Microsoft.Azure.Commands.RemoteApp.Common;
-using System.Management.Automation;
+using Microsoft.Azure.Commands.ResourceManager.Common;
+using Microsoft.Azure.Management.RemoteApp.Models;
 using System;
-using Hyak.Common;
+using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    public abstract partial class RemoteAppArmCmdletBase : AzurePSCmdlet
+    public abstract partial class RemoteAppArmCmdletBase : AzureRMCmdlet
     {
         public RemoteAppArmCmdletBase()
         {
@@ -22,7 +22,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {
                 if (_RemoteAppClient == null)
                 {
-                    _RemoteAppClient = new RemoteAppManagementClientWrapper(Profile, Profile.Context.Subscription);
+                    _RemoteAppClient = new RemoteAppManagementClientWrapper(DefaultContext, DefaultContext.Subscription);
                 }
 
                 return _RemoteAppClient;
@@ -32,6 +32,41 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {
                 // for testing purpose only
                 _RemoteAppClient = value;
+            }
+        }
+
+
+        public abstract void ExecuteCmdlet();
+
+        protected override void ProcessRecord()
+        {
+            try
+            {
+                this.ExecuteCmdlet();
+            }
+            catch (Exception e)
+            {
+                // Handle if this or the inner exception is of type CloudException
+                CloudException ce = e as CloudException;
+                ErrorRecord er = null;
+
+                if (ce == null)
+                {
+                    ce = e.InnerException as CloudException;
+                }
+
+                if (ce != null)
+                {
+                    HandleCloudException(null, ce);
+                }
+                else
+                {
+                    er = RemoteAppCollectionErrorState.CreateErrorRecordFromException(e, String.Empty, null, ErrorCategory.NotSpecified);
+
+                    ThrowTerminatingError(er);
+                }
+
+
             }
         }
 

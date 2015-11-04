@@ -2,12 +2,9 @@
 using Microsoft.Azure.Common.Authentication.Models;
 using Microsoft.Azure.Management.RemoteApp;
 using Microsoft.Azure.Management.RemoteApp.Models;
-using Microsoft.Rest;
-using Microsoft.WindowsAzure.Commands.ServiceManagement.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Common
 {
@@ -21,9 +18,9 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
 
         private IRemoteAppManagementClient Client { get; set; }
 
-        internal RemoteAppManagementClientWrapper(AzureProfile profile, AzureSubscription subscription)
+        internal RemoteAppManagementClientWrapper(AzureContext content, AzureSubscription subscription)
         {
-            Client = AzureSession.ClientFactory.CreateArmClient<RemoteAppManagementClient>(profile.Context, AzureEnvironment.Endpoint.ResourceManager);
+            Client = AzureSession.ClientFactory.CreateArmClient<RemoteAppManagementClient>(content, AzureEnvironment.Endpoint.ResourceManager);
             Client.ArmNamespace = DefaultRemoteAppArmNamespace;
         }
 
@@ -118,7 +115,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
 
                 if (!(String.Equals(details.AccountInfo.WorkspaceName, accountInfo.AccountInfo.WorkspaceName) && String.Equals(details.AccountInfo.PrivacyUrl, accountInfo.AccountInfo.PrivacyUrl)))
                 {
-                    accountInfo.Location = details.Location;
+                    accountInfo.AccountInfo.Location = details.AccountInfo.Location;
                     accountInfo.Tags = new Dictionary<string, string>();
 
                     if (String.IsNullOrEmpty(accountInfo.AccountInfo.WorkspaceName))

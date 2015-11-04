@@ -142,7 +142,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         }
 
 
-        public override void ExecuteRemoteAppCmdlet()
+        public override void ExecuteCmdlet()
         {
             bool found = false;
 

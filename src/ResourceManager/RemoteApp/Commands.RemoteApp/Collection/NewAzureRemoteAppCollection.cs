@@ -12,16 +12,15 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
-using Microsoft.Azure.Commands.RemoteApp;
-using Microsoft.Azure.Management.RemoteApp.Models;
+using Microsoft.Azure.Common.Authentication;
+using Microsoft.Azure.Common.Authentication.Models;
 using Microsoft.Azure.Management.Network;
 using Microsoft.Azure.Management.Network.Models;
-using Microsoft.Azure.Common.Authentication.Models; 
-using Microsoft.Azure.Common.Authentication; 
+using Microsoft.Azure.Management.RemoteApp.Models;
 using System;
-using System.Net;
 using System.Collections.Generic;
 using System.Management.Automation;
+using System.Net;
 using System.Threading.Tasks;
 
 
@@ -139,13 +138,12 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         private Collection errorCollection = new Collection();
 
 
-        public override void ExecuteRemoteAppCmdlet()
+        public override void ExecuteCmdlet()
         {
             NetworkCredential creds = null;
             CollectionCreationDetailsWrapper createDetails = new CollectionCreationDetailsWrapper(){
-                CollectionCreationDetailsWrapperName = CollectionName,
+                CollectionName = CollectionName,
                 TemplateImageName = ImageName,
-                Region = Location,
                 Location = Location,
                 BillingPlanName = Plan,
                 Description = Description,
@@ -172,8 +170,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                             {
                                 createDetails.DnsServers = DnsServers.Split(new char[] { ',' });
                             }
-
-                            createDetails.Region = Location;
+                            createDetails.Location = Location;
                         }
 
                         createDetails.AdInfo = new ActiveDirectoryConfig()
@@ -188,7 +185,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 case NoDomain:
                 default:
                     {
-                        createDetails.Region = Location;
+                        // do nothing
                         break;
                     }
             }
@@ -247,7 +244,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
         private VirtualNetwork GetAzureVNet(string name)
         {
-            NetworkResourceProviderClient networkClient = AzureSession.ClientFactory.CreateClient<NetworkResourceProviderClient>(Profile.Context, AzureEnvironment.Endpoint.ResourceManager);
+            NetworkResourceProviderClient networkClient = AzureSession.ClientFactory.CreateClient<NetworkResourceProviderClient>(DefaultContext, AzureEnvironment.Endpoint.ResourceManager);
             Task<VirtualNetworkListResponse> listNetworkTask = networkClient.VirtualNetworks.ListAsync(ResourceGroupName);
 
             listNetworkTask.Wait();

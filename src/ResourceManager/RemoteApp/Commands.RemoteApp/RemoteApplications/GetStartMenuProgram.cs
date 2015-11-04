@@ -113,7 +113,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             return found;
         }
 
-        public override void ExecuteRemoteAppCmdlet()
+        public override void ExecuteCmdlet()
         {
             bool found = false;
             bool getAllPrograms = true;

@@ -12,12 +12,8 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
-using Microsoft.Azure.Management.RemoteApp.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
-using Microsoft.Azure.Commands.RemoteApp;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
@@ -40,7 +36,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         [ValidatePattern(UserPrincipalValdatorString)]
         public string UserUpn { get; set; }
 
-        public override void ExecuteRemoteAppCmdlet()
+        public override void ExecuteCmdlet()
         {
             if (String.IsNullOrWhiteSpace(CollectionName))
             {
