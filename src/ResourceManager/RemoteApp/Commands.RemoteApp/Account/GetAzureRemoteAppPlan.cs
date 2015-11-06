@@ -20,7 +20,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "AzureRemoteAppPlan")]
+    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppPlan")]
     public class GetAzureRemoteAppAccountBillingPlans : RemoteAppArmCmdletBase
     {
         public override void ExecuteCmdlet()

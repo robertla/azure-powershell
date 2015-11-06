@@ -16,7 +16,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Remove, "AzureRemoteAppCollection")]
+    [Cmdlet(VerbsCommon.Remove, "AzureRmRemoteAppCollection")]
     public class RemoveAzureRemoteAppCollection : RemoteAppArmResourceCmdletBase
     {
         [Parameter(

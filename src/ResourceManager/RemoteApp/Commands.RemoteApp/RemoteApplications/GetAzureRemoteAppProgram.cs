@@ -20,7 +20,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "AzureRemoteAppProgram", DefaultParameterSetName = FilterByName), OutputType(typeof(ApplicationDetails))]
+    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppProgram", DefaultParameterSetName = FilterByName), OutputType(typeof(ApplicationDetails))]
     public class GetAzureRemoteAppProgram : RemoteAppArmResourceCmdletBase
     {
         private const string FilterByName = "FilterByName";

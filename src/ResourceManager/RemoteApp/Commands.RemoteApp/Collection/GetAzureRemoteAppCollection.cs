@@ -20,7 +20,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "AzureRemoteAppCollection")]
+    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppCollection")]
     public class GetAzureRemoteAppCollection : RemoteAppArmResourceCmdletBase
     {
         [Parameter(

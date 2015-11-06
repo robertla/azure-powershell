@@ -19,7 +19,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Remove, "AzureRemoteAppUser"), OutputType(typeof(SecurityPrincipalOperationErrorDetails))]
+    [Cmdlet(VerbsCommon.Remove, "AzureRmRemoteAppUser"), OutputType(typeof(SecurityPrincipalOperationErrorDetails))]
     public class RemoveAzureRemoteAppUser : SecurityPrincipalsCmdletBase
     {
         [Parameter(Mandatory = true,

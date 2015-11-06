@@ -17,7 +17,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsData.Unpublish, "AzureRemoteAppProgram", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High), OutputType(typeof(PublishingOperationResult))]
+    [Cmdlet(VerbsData.Unpublish, "AzureRmRemoteAppProgram", SupportsShouldProcess = true, ConfirmImpact = ConfirmImpact.High), OutputType(typeof(PublishingOperationResult))]
     public class UnpublishAzureRemoteAppProgram : RemoteAppArmResourceCmdletBase
     {
         [Parameter(Mandatory = true,

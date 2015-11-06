@@ -20,7 +20,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "AzureRemoteAppLocation")]
+    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppLocation")]
     public class GetAzureRemoteAppAccountLocations : RemoteAppArmCmdletBase
     {
         public override void ExecuteCmdlet()

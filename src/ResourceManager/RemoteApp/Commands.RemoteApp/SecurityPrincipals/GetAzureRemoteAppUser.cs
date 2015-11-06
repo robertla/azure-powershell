@@ -21,7 +21,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "AzureRemoteAppUser"), OutputType(typeof(ConsentStatusModel))]
+    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppUser"), OutputType(typeof(ConsentStatusModel))]
     public class GetAzureRemoteAppUser : RemoteAppArmResourceCmdletBase
     {
         [Parameter(

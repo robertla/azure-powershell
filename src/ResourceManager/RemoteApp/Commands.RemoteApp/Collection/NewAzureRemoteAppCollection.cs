@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.New, "AzureRemoteAppCollection", DefaultParameterSetName = NoDomain), OutputType(typeof(CollectionCreationDetailsWrapper))]
+    [Cmdlet(VerbsCommon.New, "AzureRmRemoteAppCollection", DefaultParameterSetName = NoDomain), OutputType(typeof(CollectionCreationDetailsWrapper))]
     public class NewAzureRemoteAppCollection : RemoteAppArmResourceCmdletBase
     {
         private const string DomainJoined = "DomainJoined";

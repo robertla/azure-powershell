@@ -20,7 +20,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "AzureRemoteAppSession")]
+    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppSession")]
     public class GetAzureRemoteAppSessions : RemoteAppArmResourceCmdletBase
     {
         [Parameter(

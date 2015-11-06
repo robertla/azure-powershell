@@ -17,7 +17,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsLifecycle.Invoke, "AzureRemoteAppSessionLogoff")]
+    [Cmdlet(VerbsLifecycle.Invoke, "AzureRmRemoteAppSessionLogoff")]
     public class SetAzureRemoteAppSessionLogoff : RemoteAppArmResourceCmdletBase
     {
         [Parameter(

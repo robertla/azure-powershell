@@ -19,7 +19,7 @@ using System.Net;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Set, "AzureRemoteAppCollection", DefaultParameterSetName = DescriptionOnly), OutputType(typeof(CollectionCreationDetailsWrapper))]
+    [Cmdlet(VerbsCommon.Set, "AzureRmRemoteAppCollection", DefaultParameterSetName = DescriptionOnly), OutputType(typeof(CollectionCreationDetailsWrapper))]
     public class SetAzureRemoteAppCollection : RemoteAppArmResourceCmdletBase
     {
         private const string DomainJoined = "DomainJoined";
