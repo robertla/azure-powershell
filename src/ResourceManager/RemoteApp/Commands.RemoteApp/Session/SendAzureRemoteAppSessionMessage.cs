@@ -18,7 +18,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommunications.Send, "AzureRemoteAppSessionMessage")]
+    [Cmdlet(VerbsCommunications.Send, "AzureRmRemoteAppSessionMessage")]
     public class SetAzureRemoteAppSessionSendMessage : RemoteAppArmResourceCmdletBase
     {
         [Parameter(

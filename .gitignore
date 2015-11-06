@@ -2,6 +2,9 @@
 src/Publish/
 src/Package/
 
+# Temporary nuget packages
+tools/LocalFeed
+
 obj
 TestResults
 *.orig

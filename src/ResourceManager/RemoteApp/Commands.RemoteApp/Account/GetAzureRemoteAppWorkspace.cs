@@ -18,7 +18,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "AzureRemoteAppWorkspace")]
+    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppWorkspace")]
     public class GetAzureRemoteAppAccount : RemoteAppArmCmdletBase
     {
         public override void ExecuteCmdlet()

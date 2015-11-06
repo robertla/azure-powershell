@@ -16,7 +16,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Set, "AzureRemoteAppAccountBilling")]
+    [Cmdlet(VerbsCommon.Set, "AzureRmRemoteAppAccountBilling")]
     public class SetAzureRemoteAppAccountBilling : RemoteAppArmCmdletBase
     {
         public override void ExecuteCmdlet()

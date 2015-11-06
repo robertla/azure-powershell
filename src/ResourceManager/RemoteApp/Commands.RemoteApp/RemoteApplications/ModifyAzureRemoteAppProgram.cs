@@ -18,7 +18,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsData.Update, "AzureRemoteAppProgram"), OutputType(typeof(PublishingOperationResult), typeof(Job))]
+    [Cmdlet(VerbsData.Update, "AzureRmRemoteAppProgram"), OutputType(typeof(PublishingOperationResult), typeof(Job))]
     public class ModifyAzureRemoteAppProgram : RemoteAppArmResourceCmdletBase
     {
         [Parameter(Mandatory = true,

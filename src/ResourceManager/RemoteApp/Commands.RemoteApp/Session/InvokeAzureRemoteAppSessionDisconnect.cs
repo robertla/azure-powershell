@@ -17,7 +17,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommunications.Disconnect, "AzureRemoteAppSession")]
+    [Cmdlet(VerbsCommunications.Disconnect, "AzureRmRemoteAppSession")]
     public class SetAzureRemoteAppSessionDisconnect : RemoteAppArmResourceCmdletBase
     {
         [Parameter(

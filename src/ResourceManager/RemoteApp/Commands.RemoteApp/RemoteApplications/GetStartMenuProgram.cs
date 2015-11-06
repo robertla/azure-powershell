@@ -20,7 +20,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "AzureRemoteAppStartMenuProgram"), OutputType(typeof(StartMenuApplication))]
+    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppStartMenuProgram"), OutputType(typeof(StartMenuApplication))]
     public class GetStartMenuProgram : RemoteAppArmResourceCmdletBase
     {
         [Parameter(Mandatory = true,

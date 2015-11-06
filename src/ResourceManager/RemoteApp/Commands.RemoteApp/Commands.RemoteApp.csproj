@@ -185,6 +185,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AzureRM.RemoteApp.psd1" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

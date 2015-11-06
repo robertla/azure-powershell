@@ -18,7 +18,7 @@ using System.Management.Automation;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Add, "AzureRemoteAppUser"), OutputType(typeof(SecurityPrincipalOperationErrorDetails))]
+    [Cmdlet(VerbsCommon.Add, "AzureRmRemoteAppUser"), OutputType(typeof(SecurityPrincipalOperationErrorDetails))]
     public class AddAzureRemoteAppUser : SecurityPrincipalsCmdletBase
     {
         [Parameter(Mandatory = true,
