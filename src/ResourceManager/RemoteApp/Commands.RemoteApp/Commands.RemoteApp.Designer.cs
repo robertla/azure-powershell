@@ -61,7 +61,7 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AdInfo cannot be added to a CloudOnly Collection.
+        ///   Looks up a localized string similar to AdInfo cannot be added to a cloud-only collection.
         /// </summary>
         internal static string AadInfoCanNotBeAddedToCloudOnlyCollectionMessage {
             get {
@@ -106,6 +106,33 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to find virtual machine {0}..
+        /// </summary>
+        internal static string FailedToFindVMImage {
+            get {
+                return ResourceManager.GetString("FailedToFindVMImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t get Sas for template image uri..
+        /// </summary>
+        internal static string FailedToGetSasUriError {
+            get {
+                return ResourceManager.GetString("FailedToGetSasUriError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Both domain name and credentials must be specified..
+        /// </summary>
+        internal static string InvalidADArguments {
+            get {
+                return ResourceManager.GetString("InvalidADArguments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid Argument SubnetName: {0} not found..
         /// </summary>
         internal static string InvalidArgumentSubNetNameNotFoundMessageFormat {
@@ -120,6 +147,24 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         internal static string InvalidArgumentVNetNameNotFoundMessageFormat {
             get {
                 return ResourceManager.GetString("InvalidArgumentVNetNameNotFoundMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location must be supplied for cloud-only collections..
+        /// </summary>
+        internal static string InvalidLocationArgument {
+            get {
+                return ResourceManager.GetString("InvalidLocationArgument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Argument: OS Image type is {0}. It must be Windows Server..
+        /// </summary>
+        internal static string InvalidOsTypeErrorFormat {
+            get {
+                return ResourceManager.GetString("InvalidOsTypeErrorFormat", resourceCulture);
             }
         }
         
@@ -156,6 +201,15 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         internal static string SessionNotFoundByUserUpnFormat {
             get {
                 return ResourceManager.GetString("SessionNotFoundByUserUpnFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No templates were found in your subscription.
+        /// </summary>
+        internal static string TemplateNotFound {
+            get {
+                return ResourceManager.GetString("TemplateNotFound", resourceCulture);
             }
         }
         

@@ -65,7 +65,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Azure.Management.RemoteApp, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.Azure.Management.RemoteApp.0.0.9-prerelease\lib\net45\Microsoft.Azure.Management.RemoteApp.dll</HintPath>
+      <HintPath>..\..\..\packages\Microsoft.Azure.Management.RemoteApp.0.0.11-prerelease\lib\net45\Microsoft.Azure.Management.RemoteApp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Azure.ResourceManager, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -148,6 +148,7 @@
     <Compile Include="Common\Exception.cs" />
     <Compile Include="Common\RemoteAppManagementClient_Application.cs" />
     <Compile Include="Common\RemoteAppManagementClient_SecurityPrincipal.cs" />
+    <Compile Include="Common\RemoteAppManagementClient_TemplateImages.cs" />
     <Compile Include="Common\RemoteAppRegEx.cs" />
     <Compile Include="Common\Requires.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -167,6 +168,8 @@
     <Compile Include="SecurityPrincipals\Models\ConsentStatusModel.cs" />
     <Compile Include="SecurityPrincipals\RemoveAzureRemoteAppUser.cs" />
     <Compile Include="SecurityPrincipals\SecurityPrincipals.cs" />
+    <Compile Include="TemplateImage\GetAzureRemoteAppTemplateImage.cs" />
+    <Compile Include="TemplateImage\RemoveAzureREmoteAppTemplateImage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Commands.Common\Commands.Common.csproj">
@@ -185,7 +188,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AzureRM.RemoteApp.psd1" />
+    <None Include="AzureRM.RemoteApp.psd1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AadInfoCanNotBeAddedToCloudOnlyCollectionMessage" xml:space="preserve">
-    <value>AdInfo cannot be added to a CloudOnly Collection</value>
+    <value>AdInfo cannot be added to a cloud-only collection</value>
   </data>
   <data name="AccountNotFoundBySubscriptionId" xml:space="preserve">
     <value>RemoteApp account not found</value>
@@ -132,11 +132,29 @@
   <data name="CollectionNotFoundByNameFormat" xml:space="preserve">
     <value>RemoteApp collection name: {0} not found</value>
   </data>
+  <data name="FailedToGetSasUriError" xml:space="preserve">
+    <value>Couldn't get Sas for template image uri.</value>
+  </data>
+  <data name="FailedToFindVMImage" xml:space="preserve">
+    <value>Unable to find virtual machine {0}.</value>
+  </data>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>No templates were found in your subscription</value>
+  </data>
   <data name="InvalidArgumentSubNetNameNotFoundMessageFormat" xml:space="preserve">
     <value>Invalid Argument SubnetName: {0} not found.</value>
   </data>
+  <data name="InvalidOsTypeErrorFormat" xml:space="preserve">
+    <value>Invalid Argument: OS Image type is {0}. It must be Windows Server.</value>
+  </data>
   <data name="InvalidArgumentVNetNameNotFoundMessageFormat" xml:space="preserve">
     <value>InvalidArgument VNetName: {0} not found.</value>
+  </data>
+  <data name="InvalidADArguments" xml:space="preserve">
+    <value>Both domain name and credentials must be specified.</value>
+  </data>
+  <data name="InvalidLocationArgument" xml:space="preserve">
+    <value>Location must be supplied for cloud-only collections.</value>
   </data>
   <data name="LinkAzureVNetFeatureNotEnabledMessage" xml:space="preserve">
     <value>"Link Azure Vnet" Feature not enabled</value>
