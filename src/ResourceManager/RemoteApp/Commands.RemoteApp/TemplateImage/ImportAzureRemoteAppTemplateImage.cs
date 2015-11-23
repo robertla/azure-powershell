@@ -31,19 +31,79 @@ using Microsoft.WindowsAzure.Commands.Common.Storage;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.Text.RegularExpressions;
+using Microsoft.WindowsAzure.Storage.Auth;
+
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
 
-    public class ImageSasUri
+    public class BlobUri
     {
-      public ImageSasUri(Uri sourceUri, string resourceGroupName)
-        {
-            SourceUri = sourceUri;
-            ResourceName = resourceGroupName;
-        }
+      internal static bool TryParseUri(string sourceUri, string resourceGroupName, out BlobUri sasUri) 
+      {
+          Uri uri = null;
+          string[] segments = null;
+          string storageAccountName = null;
+          string storageDnsName = null;
+          string storageContainerName = null;
+          string storageBlobName = null;
+          string baseUri = null;
+
+          sasUri = null;
+
+          if (!Uri.TryCreate(sourceUri, UriKind.Absolute, out uri))
+          {
+              return false;
+          }
+
+          segments = uri.DnsSafeHost.ToLower().Split('.');
+          if (segments.Count() < 2)  // Host must be a FQDN
+          {
+              return false;
+          }
+
+          // Name of host is the storage account name
+          storageAccountName = segments[0];
+
+          // DNS name is network name minus host name
+          storageDnsName = String.Join(".", segments, 1, segments.Count() - 1);
+
+
+          segments = uri.AbsolutePath.ToLower().Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+          // Name of host is the storage account name
+          storageContainerName = segments[0]; // use System.Web.HttpUtility.UrlDecode
+
+          // Name of blob is network name minus host name
+          storageBlobName = String.Join("/", segments, 1, segments.Count() - 1);
+          baseUri = uri.Scheme + Uri.SchemeDelimiter + uri.DnsSafeHost;
+
+          sasUri = new BlobUri(uri, storageAccountName, storageDnsName, storageContainerName, storageBlobName, resourceGroupName);
+          
+          return true;
+      }
+
+      public BlobUri(Uri uri, string accountName, string domainName, string containerName, string blobName, string resourceGroupName)
+      {
+          SourceUri = uri;
+          StorageAccountName = accountName;
+          StorageDomainName = domainName;
+          BlobContainerName = containerName;
+          BlobName = blobName;
+          ResourceName = resourceGroupName;
+      }
 
         public Uri SourceUri { get; set; }
+
+        public string StorageAccountName { get; set; }
+
+        public string StorageDomainName { get; set; }
+
+        public string BlobContainerName { get; set; }
+
+        public string BlobName { get; set; }
+
+        public string SasUri { get; set; }
 
         public string ResourceName { get; set; }
     }
@@ -57,119 +117,45 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         [Parameter(Mandatory = true,
             Position = 0,
             ValueFromPipelineByPropertyName = true,
-            ParameterSetName = AzureVmUpload,
-            HelpMessage = "Sysprep-generalized VM image name in Azure")]
-        [Alias("ComputerName")]
-        public string AzureVmImageName { get; set; }
+            HelpMessage = "Location where this template image will be stored. Use Get-AzureRemoteAppLocation to see the locations available."
+        )]
+        public string Location { get; set; }
+
+        [Parameter(
+            Mandatory = true,
+            Position = 1,
+            ValueFromPipelineByPropertyName = true,
+            HelpMessage = "Name for the template image.")]
+        public string TemplateImageName { get; set; }
 
         [Parameter(Mandatory = true,
-            Position = 0,
+            Position = 2,
+            ValueFromPipelineByPropertyName = true,
+            ParameterSetName = AzureVmUpload,
+            HelpMessage = "Name of virtual machine with a Sysprep-generalized image in Azure")]
+        [Alias("ComputerName")]
+        public string AzureVmName { get; set; }
+
+        [Parameter(Mandatory = true,
+            Position = 2,
             ValueFromPipelineByPropertyName = true,
             ParameterSetName = SasUriUpload,
             HelpMessage = "SAS URI for a Sysprep-generalized VM image in Azure")]
         public string SasUri { get; set; }
 
-        [Parameter(Mandatory = true,
-            Position = 1,
-            ValueFromPipelineByPropertyName = true,
-            HelpMessage = "Location in which this template image will be stored. Use Get-AzureRemoteAppLocation to see the locations available."
-        )]
-        public string Location { get; set; }
-
-        public override void ExecuteCmdlet()
+        private string GetAzureImageSasUri(string imageUrl, string groupName)
         {
-            string imageName = null;
-            string sasUri = null;
-            ImageSasUri uploadParameters = null;
-            TemplateImageCreateDetails details = null;
-            TemplateImage response = null;
-
-            switch (ParameterSetName)
-            {
-               case AzureVmUpload:
-               {
-                  imageName = AzureVmImageName.Trim();
-                  uploadParameters = GetAzureVMImageUri(imageName);
-                  break;
-               }
-               
-                case SasUriUpload:
-                {
-                   imageName = SasUri.Trim();
-                   uploadParameters = GetAzureOSImageUri(imageName);
-                   break;
-                }
-            }
-
-            sasUri = GetAzureImageSasUri(uploadParameters);
-
-/// Testing only
-/// 
-            Uri uri = new Uri(sasUri);
-            CloudPageBlob blob = new CloudPageBlob(uri);
-            System.IO.MemoryStream ms = new System.IO.MemoryStream();
-            blob.DownloadToStream(ms);
-            /// Testing only
-            /// 
-
-            details = new TemplateImageCreateDetails()
-            {
-                name = imageName,
-                location = uploadParameters.ResourceName,
-                sourceImageSasUri = sasUri,
-            };
-
-            response = RemoteAppClient.SetTemplateImage(details);
-        
-        }
-
-
-        // https://github.com/Azure/azure-powershell/pull/1041
-
-
-        //$vm2 = Get-AzureRmResourceGroup | Get-AzureRmVM
-
-        // https://lqportalvhdsb65fscggcwhm.blob.core.windows.net/vhds/w00f-2042-529359-os-2015-11-16.vhd
-        // https://9hportalvhds9q3g9nzy4w4p.blob.core.windows.net/vhds/kwiggle2-kwiggle2-2015-11-16.vhd
-
-        //    TypeName: Microsoft.Azure.Commands.Compute.Models.PSVirtualMachine
-
-        //$vm2.StorageProfile.OSDisk.VirtualHardDisk
-        //    Microsoft.Azure.Management.Compute.Models.OSDisk
-        //$vm2.StorageProfile.ImageReference
-        //    TypeName: Microsoft.Azure.Management.Compute.Models.ImageReference
-
-        //Get-AzureRmVMImageOffer
-        //Get-AzureRmVMImagePublisher
-        //Get-AzureRmVMImageSku
-        //Get-AzureRmVMImagePublisher  -Location westus | ? PublisherName -like *microsoft*
-        //Get-AzureRmVMImageOffer -Location westus -PublisherName MicrosoftWindowsServer
-        //Get-AzureRmVMImageSku -Location westus -PublisherName MicrosoftWindowsServer -Offer WindowsServer
-        //Get-AzureRmVMImageSku -Location westus -PublisherName MicrosoftWindowsServer -Offer WindowsServer | ? Skus -eq 2012-R2-Datacenter
-        //    TypeName: Microsoft.Azure.Commands.Compute.Models.PSVirtualMachineImageSku
-
-        private string GetAzureImageSasUri(ImageSasUri uploadParameters)
-        {
+            Uri uri = null;
             StorageManagementClient storageClient = null;
             SharedAccessBlobPolicy sasConstraints = null;
             CloudStorageAccount storageAccount = null;
             CloudPageBlob pageBlob = null;
             ErrorRecord er = null;
-            string sasUri = null;
+            string sasQuery = null;
             string storageAccountName = null;
 
-            storageAccountName = uploadParameters.SourceUri.Authority.Split('.')[0];
-            storageClient = AzureSession.ClientFactory.CreateClient <StorageManagementClient>(DefaultContext, AzureEnvironment.Endpoint.ResourceManager);
-            storageAccount = StorageUtilities.GenerateCloudStorageAccount(storageClient, uploadParameters.ResourceName, storageAccountName);
 
-            pageBlob = new CloudPageBlob(uploadParameters.SourceUri, storageAccount.Credentials);
-            sasConstraints = new SharedAccessBlobPolicy();
-            sasConstraints.Permissions = SharedAccessBlobPermissions.Read;
-            sasConstraints.SharedAccessStartTime = DateTime.UtcNow.AddMinutes(-5);  // Sometimes the clocks are 2-3 seconds fast and the SAS is not yet valid when the service tries to use it.
-            sasConstraints.SharedAccessExpiryTime = DateTime.UtcNow.AddHours(5);
-            sasUri = pageBlob.GetSharedAccessSignature(sasConstraints);
-
-            if (sasUri == null)
+            if (!Uri.TryCreate(imageUrl, UriKind.Absolute, out uri))
             {
                 er = RemoteAppCollectionErrorState.CreateErrorRecordFromString(
                                      Commands_RemoteApp.FailedToGetSasUriError,
@@ -181,65 +167,23 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 ThrowTerminatingError(er);
             }
 
-            return uploadParameters.SourceUri.AbsoluteUri + sasUri;
-        }
+            storageAccountName = uri.DnsSafeHost.ToLower().Split('.')[0];
 
-        private ImageSasUri GetAzureOSImageUri(string imageNameUri)
-        {
-            IComputeManagementClient computeClient = null;
-            Uri uri = null;
-            ImageSasUri uploadParameters = null;
-
-            computeClient = AzureSession.ClientFactory.CreateArmClient<ComputeManagementClient>(DefaultContext, AzureEnvironment.Endpoint.ResourceManager);
-//            computeClient.VirtualMachineImages.Get()
-
-            if (Uri.TryCreate(imageNameUri, UriKind.Absolute, out uri) == false)
-            {
-                ;
-            }
-
-//            uploadParameters = new ImageSasUri(uri, resourceName.Groups["resourceName"].Value);
-
-            return uploadParameters;
-        }
+            storageClient = AzureSession.ClientFactory.CreateClient <StorageManagementClient>(DefaultContext, AzureEnvironment.Endpoint.ResourceManager);
+            storageAccount = StorageUtilities.GenerateCloudStorageAccount(storageClient, groupName, storageAccountName);
 
 
-        private ImageSasUri GetAzureVMImageUri(string vmName)
-        {
-            IComputeManagementClient computeClient = null;
-            Page<VirtualMachine> vmList = null;
-            Regex resourceNameRegEx = new Regex(@"/subscriptions/\S+/resourceGroups/(?<resourceName>\S+)/providers/\S+", RegexOptions.IgnoreCase);
-            ImageSasUri uploadParameters = null;
-            ErrorRecord er = null;
+            pageBlob = new CloudPageBlob(uri, storageAccount.Credentials);
+            sasConstraints = new SharedAccessBlobPolicy();
+            sasConstraints.Permissions = SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.List;
+            sasConstraints.SharedAccessStartTime = DateTime.UtcNow.AddMinutes(-5);  // Sometimes the clocks are 2-3 seconds fast and the SAS is not yet valid when the service tries to use it.
+            sasConstraints.SharedAccessExpiryTime = DateTime.UtcNow.AddHours(5);
+            sasQuery = pageBlob.GetSharedAccessSignature(sasConstraints);
 
-            computeClient = AzureSession.ClientFactory.CreateArmClient<ComputeManagementClient>(DefaultContext, AzureEnvironment.Endpoint.ResourceManager);
-            vmList = computeClient.VirtualMachines.ListAll();
-
-            foreach (VirtualMachine vm in vmList)
-            {
-                if (String.Equals(vm.OsProfile.ComputerName,  vmName, StringComparison.CurrentCultureIgnoreCase))
-                {
-                   VirtualHardDisk disk = null;
-                   Match resourceName = resourceNameRegEx.Match(vm.Id);
-                   string groupName = null;
-                   
-                   if (resourceName.Success)
-                   {
-                      groupName =  resourceName.Groups["resourceName"].Value;
-                   }
-
-                    VerifyWindowsConfiguration(vm);
-                    disk = vm.StorageProfile.OsDisk.Vhd;
-
-                    uploadParameters = new ImageSasUri(new Uri(disk.Uri), resourceName.Groups["resourceName"].Value);
-                    break;
-                }
-            }
-
-            if (uploadParameters == null)
+            if (sasQuery == null)
             {
                 er = RemoteAppCollectionErrorState.CreateErrorRecordFromString(
-                                     Commands_RemoteApp.FailedToFindVMImage,
+                                     Commands_RemoteApp.FailedToGetSasUriError,
                                      String.Empty,
                                      null,
                                      ErrorCategory.ConnectionError
@@ -248,12 +192,69 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 ThrowTerminatingError(er);
             }
 
-            return uploadParameters;
+            return uri.AbsoluteUri + sasQuery;
+        }
+
+        private void GetAzureOSImageUri(string imageNameUri, out string url, out string resourceGroupName)
+        {
+            IComputeManagementClient computeClient = null;
+
+            // This will be updating shortly please ignore for now
+            url = null;
+            resourceGroupName = null;
+
+            computeClient = AzureSession.ClientFactory.CreateClient<ComputeManagementClient>(DefaultContext, AzureEnvironment.Endpoint.ResourceManager);
+
+        }
+
+
+        private void GetAzureVMImageUri(string vmName, out string url, out string resourceGroupName)
+        {
+            IComputeManagementClient computeClient = null;
+            ListParameters listParameters = new ListParameters();
+            VirtualMachineListResponse vmListResult = null;
+            Regex resourceNameRegEx = new Regex(@"/subscriptions/\S+/resourceGroups/(?<resourceName>\S+)/providers/\S+", RegexOptions.IgnoreCase);
+            ErrorRecord er = null;
+            url = null;
+            resourceGroupName = null;
+
+            computeClient = AzureSession.ClientFactory.CreateClient<ComputeManagementClient>(DefaultContext, AzureEnvironment.Endpoint.ResourceManager);
+
+            vmListResult = computeClient.VirtualMachines.ListAll(listParameters);
+
+            if (vmListResult != null && vmListResult.VirtualMachines != null)
+            {
+                foreach (VirtualMachine vm in vmListResult.VirtualMachines)
+                {
+                    if (String.Equals(vm.OSProfile.ComputerName, vmName, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Match resourceName = resourceNameRegEx.Match(vm.Id);
+
+                        if (!resourceName.Success)
+                        {
+                            er = RemoteAppCollectionErrorState.CreateErrorRecordFromString(
+                                                 Commands_RemoteApp.FailedToFindVMImage,
+                                                 String.Empty,
+                                                 null,
+                                                 ErrorCategory.ConnectionError
+                                                 );
+
+                            ThrowTerminatingError(er);
+                        }
+
+                        VerifyWindowsConfiguration(vm);
+                        resourceGroupName = resourceName.Groups["resourceName"].Value;
+                        url = vm.StorageProfile.OSDisk.VirtualHardDisk.Uri;
+
+                        break;
+                    }
+                }
+            }
         }
 
         private void VerifyWindowsConfiguration(VirtualMachine vm)
         {
-            if (vm.StorageProfile.OsDisk.OsType != OperatingSystemTypes.Windows ||
+            if (vm.StorageProfile.OSDisk.OperatingSystemType != OperatingSystemTypes.Windows ||
                 vm.StorageProfile.ImageReference.Offer != "WindowsServer" ||
                 vm.StorageProfile.ImageReference.Publisher != "MicrosoftWindowsServer" ||
                 (vm.StorageProfile.ImageReference.Sku != "2012-Datacenter" &&
@@ -268,6 +269,45 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
                 ThrowTerminatingError(er);
             }
+        }
+
+        public override void ExecuteCmdlet()
+        {
+            string imageUrl = null;
+            string groupName = null;
+            string imageName = null;
+            string sasUri = null;
+            BlobUri uploadParameters = null;
+            TemplateImageCreateDetails details = null;
+            TemplateImage response = null;
+
+            switch (ParameterSetName)
+            {
+                case AzureVmUpload:
+                    {
+                        imageName = AzureVmName.Trim();
+                        GetAzureVMImageUri(imageName, out imageUrl, out groupName);
+                        break;
+                    }
+
+                case SasUriUpload:
+                    {
+                        imageName = SasUri.Trim();
+                        GetAzureOSImageUri(imageName, out imageUrl, out groupName);
+                        break;
+                    }
+            }
+
+            BlobUri.TryParseUri(imageUrl, groupName, out uploadParameters);
+            sasUri = GetAzureImageSasUri(imageUrl, groupName);
+
+            details = new TemplateImageCreateDetails()
+            {
+                SourceImageSasUri = sasUri,
+            };
+
+            response = RemoteAppClient.CreateOrUpdateTemplateImage(Location, TemplateImageName, details);
+
         }
     }
 }

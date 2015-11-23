@@ -21,18 +21,31 @@ using System.Management.Automation;
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
     [Cmdlet(VerbsCommon.Remove, "AzureRmRemoteAppTemplateImage")]
-    public class RemoveAzureREmoteAppTemplateImage : RemoteAppArmResourceCmdletBase
+    public class RemoveAzureRemoteAppTemplateImage : RemoteAppArmResourceCmdletBase
     {
         [Parameter(
             Mandatory = true,
             Position = 0,
             ValueFromPipelineByPropertyName = true,
+            HelpMessage = "Name of location.")]
+
+        public string Location { get; set; }
+
+        [Parameter(
+            Mandatory = false,
+            Position = 1,
+            ValueFromPipelineByPropertyName = true,
             HelpMessage = "Name of template image.")]
-        public string ImageName { get; set; }
+        [ValidateNotNullOrEmpty]
+
+        public string TemplateImageName { get; set; }
 
         public override void ExecuteCmdlet()
         {
-            RemoteAppClient.DeleteTemplateImages();
+            if (ShouldProcess(TemplateImageName, "Remove image"))
+            {
+                RemoteAppClient.DeleteTemplateImages(Location, TemplateImageName);
+            }
         }
     }
 }

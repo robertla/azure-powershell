@@ -69,7 +69,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                Alias = ApplicationAlias,
                AvailableToUsers = publishedApp.AvailableToUsers,
                CommandLineArguments = publishedApp.CommandLineArguments,
-               DisplayName = publishedApp.Name
+               DisplayName = publishedApp.DisplayName
             };
 
             if (CommandLine != null)

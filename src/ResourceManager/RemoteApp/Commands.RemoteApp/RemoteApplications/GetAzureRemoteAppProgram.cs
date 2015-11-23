@@ -35,14 +35,14 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         [Alias("Name")]
         public string CollectionName { get; set; }
 
-        [Parameter(Mandatory = true,
+        [Parameter(Mandatory = false,
             Position = 2,
             HelpMessage = "Name of the program. Wildcards are permitted.",
             ParameterSetName = FilterByName)]
         [ValidateNotNullOrEmpty()]
         public string RemoteAppProgram { get; set; }
 
-        [Parameter(Mandatory = true,
+        [Parameter(Mandatory = false,
             Position = 3,
             HelpMessage = "Published program alias",
             ParameterSetName = FilterByAlias)]
@@ -72,7 +72,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                     }
                 }
 
-                return string.Compare(first.Name, second.Name, StringComparison.OrdinalIgnoreCase);
+                return string.Compare(first.DisplayName, second.DisplayName, StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {
                 if (ExactMatch)
                 {
-                    appDetails = response.FirstOrDefault(app => String.Equals(app.Name, RemoteAppProgram, StringComparison.InvariantCultureIgnoreCase));
+                    appDetails = response.FirstOrDefault(app => String.Equals(app.DisplayName, RemoteAppProgram, StringComparison.InvariantCultureIgnoreCase));
                     if (appDetails == null)
                     {
                         WriteErrorWithTimestamp("Program: " + RemoteAppProgram + " does not exist in collection " + CollectionName);
@@ -105,7 +105,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 {
                     if (UseWildcard)
                     {
-                        spList = response.Where(app => Wildcard.IsMatch(app.Name)).ToList();
+                        spList = response.Where(app => Wildcard.IsMatch(app.DisplayName)).ToList();
                     }
                     else
                     {
