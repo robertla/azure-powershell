@@ -35,6 +35,32 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             }
         }
 
+        protected WildcardPattern Wildcard { get; private set; }
+
+        protected bool UseWildcard
+        {
+            get { return Wildcard != null; }
+        }
+
+        protected bool ExactMatch { get; private set; }
+
+        protected void CreateWildcardPattern(string name)
+        {
+            try
+            {
+                if (!String.IsNullOrWhiteSpace(name))
+                {
+                    ExactMatch = !WildcardPattern.ContainsWildcardCharacters(name);
+
+                    Wildcard = new WildcardPattern(name, WildcardOptions.IgnoreCase);
+                }
+            }
+            catch (WildcardPatternException e)
+            {
+                ErrorRecord er = new ErrorRecord(e, "", ErrorCategory.InvalidArgument, Wildcard);
+                ThrowTerminatingError(er);
+            }
+        }
 
         public abstract void ExecuteCmdlet();
 

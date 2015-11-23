@@ -66,10 +66,10 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
             appDetails = new ApplicationDetails()
             {
-               Alias = ApplicationAlias,
+               ApplicationAlias = ApplicationAlias,
                AvailableToUsers = publishedApp.AvailableToUsers,
                CommandLineArguments = publishedApp.CommandLineArguments,
-               DisplayName = publishedApp.Name
+               DisplayName = publishedApp.DisplayName
             };
 
             if (CommandLine != null)

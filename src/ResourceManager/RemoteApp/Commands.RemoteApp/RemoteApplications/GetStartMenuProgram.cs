@@ -60,7 +60,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                     }
                 }
 
-                return string.Compare(first.Name, second.Name, StringComparison.OrdinalIgnoreCase);
+                return string.Compare(first.StartMenuApplicationName, second.StartMenuApplicationName, StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 if (ExactMatch)
                 {
                     StartMenuApplication application = null;
-                    application = response.FirstOrDefault(app => String.Equals(app.Name, ProgramName, StringComparison.InvariantCultureIgnoreCase));
+                    application = response.FirstOrDefault(app => String.Equals(app.StartMenuApplicationName, ProgramName, StringComparison.InvariantCultureIgnoreCase));
 
                     if (application == null)
                     {
@@ -98,7 +98,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                     }
                     else if (UseWildcard)
                     {
-                        matchingApps = response.Where(app => Wildcard.IsMatch(app.Name)).ToList(); ;
+                        matchingApps = response.Where(app => Wildcard.IsMatch(app.StartMenuApplicationName)).ToList(); ;
                     }
 
                     if (matchingApps != null && matchingApps.Count() > 0)

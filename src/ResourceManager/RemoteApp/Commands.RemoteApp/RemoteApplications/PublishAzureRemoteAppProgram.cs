@@ -85,7 +85,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                     {
                         StartMenuApplication startMenu = RemoteAppClient.GetStartMenuApp(ResourceGroupName, CollectionName, StartMenuAppId);
 
-                        appName = startMenu.Name;
+                        appName = startMenu.StartMenuApplicationName;
                         appPath = startMenu.VirtualPath;
                         iconURI = startMenu.IconUri;
                         iconPngUris = startMenu.IconPngUris;
@@ -97,7 +97,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {
                 DisplayName = String.IsNullOrWhiteSpace(DisplayName) ? appName : DisplayName,
                 VirtualPath = appPath,
-                Alias = ApplicationAlias,
+                ApplicationAlias = ApplicationAlias,
                 IconUri = iconURI,
                 IconPngUris = iconPngUris,
                 CommandLineArguments = CommandLine,

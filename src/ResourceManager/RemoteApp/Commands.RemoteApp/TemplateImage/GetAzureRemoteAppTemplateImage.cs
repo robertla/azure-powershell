@@ -21,24 +21,129 @@ using System.Management.Automation;
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
     [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppTemplateImage")]
-    public class GetAzureRemoteAppTemplateImage : RemoteAppArmResourceCmdletBase
+    public class GetAzureRemoteAppTemplateImage : RemoteAppArmCmdletBase
     {
+        [Parameter(
+            Mandatory = true,
+            Position = 0,
+            ValueFromPipelineByPropertyName = true,
+            HelpMessage = "Name of location.")]
+        public string Location { get; set; }
+
+        [Parameter(
+            Mandatory = false,
+            Position = 1,
+            ValueFromPipelineByPropertyName = true,
+            HelpMessage = "Name of template image.")]
+        [ValidateNotNullOrEmpty]
+        public string TemplateImageName { get; set; }
+
+
+        private bool found = false;
+
+
+        public class TemplateImageComparer : IComparer<TemplateImage>
+        {
+            public int Compare(TemplateImage first, TemplateImage second)
+            {
+                if (first == null)
+                {
+                    if (second == null)
+                    {
+                        return 0; // both null are equal
+                    }
+                    else
+                    {
+                        return -1; // second is greateer
+                    }
+                }
+                else
+                {
+                    if (second == null)
+                    {
+                        return 1; // first is greater as it is not null
+                    }
+                }
+
+                return string.Compare(first.TemplateImageName, second.TemplateImageName, StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
+        private bool WriteAllTemplateImagesAtLocation(string location)
+        {
+            IEnumerable<TemplateImage> templateImages = null;
+            List<TemplateImage> platformList = null;
+            List<TemplateImage> customerList = null;
+            IComparer<TemplateImage> comparer = null;
+
+            templateImages = RemoteAppClient.ListTemplateImages(location);
+
+            if (templateImages != null && templateImages.Count() > 0)
+            {
+                if (UseWildcard)
+                {
+                    templateImages = templateImages.Where(t => Wildcard.IsMatch(t.TemplateImageName));
+                }
+
+                comparer = new TemplateImageComparer();
+
+                foreach (TemplateImage image in templateImages)
+                {
+                    if (image.TemplateImageType == TemplateImageType.CustomerImage)
+                    {
+                        customerList.Add(image);
+                    }
+                    else
+                    {
+                        platformList.Add(image);
+                    }
+                }
+
+                customerList.Sort(comparer);
+                WriteObject(customerList, true);
+
+                platformList.Sort(comparer);
+                WriteObject(platformList, true);
+
+                found = true;
+            }
+
+            return found;
+        }
+
+        private bool WriteTemplateImageAtLocation(string location, string templateImageName)
+        {
+            TemplateImage templateImage = RemoteAppClient.GetTemplateImage(location, templateImageName);
+
+            if (templateImage != null)
+            {
+                WriteObject(templateImage);
+                found = true;
+            }
+
+            return found;
+        }
 
         public override void ExecuteCmdlet()
         {
-
-            IEnumerable<TemplateImage> templates = null;
-
-            templates = RemoteAppClient.GetTemplateImages();
-
-            if (templates != null)
+            if (!String.IsNullOrWhiteSpace(TemplateImageName))
             {
-                WriteObject(templates, true);
+                CreateWildcardPattern(TemplateImageName);
+            }
+
+            if (ExactMatch)
+            {
+                found = WriteTemplateImageAtLocation(Location, TemplateImageName);
             }
             else
             {
-                WriteVerboseWithTimestamp(Commands_RemoteApp.TemplateNotFound);
+                found = WriteAllTemplateImagesAtLocation(Location);
             }
+
+            if (!found)
+            {
+                WriteVerboseWithTimestamp(String.Format(Commands_RemoteApp.CollectionNotFoundByNameFormat, TemplateImageName));
+            }        
         }
     }
 }

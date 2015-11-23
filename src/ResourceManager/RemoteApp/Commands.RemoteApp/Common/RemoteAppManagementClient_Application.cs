@@ -32,7 +32,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
         {
             PublishedApplicationDetails publishedApp = null; 
             
-            publishedApp = Client.Collection.GetPublishedApp(collectionName, details.Alias, resourceGroupName);
+            publishedApp = Client.Collection.GetPublishedApp(collectionName, details.ApplicationAlias, resourceGroupName);
             if (publishedApp != null)
             {
                 RemoteAppServiceException ex = new RemoteAppServiceException(
@@ -42,13 +42,13 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
                 throw ex;
             }
 
-            return Client.Collection.PublishOrUpdateApplication(details, collectionName, details.Alias, resourceGroupName);
+            return Client.Collection.PublishOrUpdateApplication(details, collectionName, details.ApplicationAlias, resourceGroupName);
         }
 
 
         internal PublishingOperationResult ModifyApp(string resourceGroupName, string collectionName, ApplicationDetails details)
         {
-            return Client.Collection.PublishOrUpdateApplication(details, collectionName, details.Alias, resourceGroupName);
+            return Client.Collection.PublishOrUpdateApplication(details, collectionName, details.ApplicationAlias, resourceGroupName);
         }
 
         internal PublishingOperationResult UnpublishApp(string resourceGroupName, string collectionName, string alias)
