@@ -9,11 +9,11 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
     public partial class RemoteAppManagementClientWrapper
     {
 
-        internal IList<TemplateImage> ListTemplateImages(string location)
+        internal IList<TemplateImage> ListTemplateImages()
         {
             TemplateImageList response = null;
 
-            response = Client.TemplateImage.GetTemplateImages(location);
+            response = Client.TemplateImage.GetTemplateImages();
 
             if (response != null)
             {
@@ -25,28 +25,13 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
             }
         }
 
-        internal TemplateImage GetTemplateImage(string location, string templateImageName)
+        internal TemplateImage GetTemplateImage(string templateImageName)
         {
             TemplateImage response = null;
 
-            response = Client.TemplateImage.GetTemplateImage(location, templateImageName);
+            response = Client.TemplateImage.GetTemplateImage(templateImageName);
 
             return response;
         }
-
-        internal TemplateImage CreateOrUpdateTemplateImage(string location, string templateImageName, TemplateImageCreateDetails details)
-        {
-            TemplateImage response = null;
-
-            response = Client.TemplateImage.CreateOrUpdate(details, location, templateImageName);
-
-            return response;
-        }
-
-        internal void DeleteTemplateImages(string location, string templateImageName)
-        {
-            Client.TemplateImage.DeleteTemplateImage(location, templateImageName);
-        }
-            
     }
 }

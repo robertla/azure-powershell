@@ -202,8 +202,6 @@
     <Compile Include="SecurityPrincipals\RemoveAzureRemoteAppUser.cs" />
     <Compile Include="SecurityPrincipals\SecurityPrincipals.cs" />
     <Compile Include="TemplateImage\GetAzureRemoteAppTemplateImage.cs" />
-    <Compile Include="TemplateImage\ImportAzureRemoteAppTemplateImage.cs" />
-    <Compile Include="TemplateImage\RemoveAzureRemoteAppTemplateImage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\Commands.Common.Storage\Commands.Common.Storage.csproj">

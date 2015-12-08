@@ -24,15 +24,8 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
     public class GetAzureRemoteAppTemplateImage : RemoteAppArmCmdletBase
     {
         [Parameter(
-            Mandatory = true,
-            Position = 0,
-            ValueFromPipelineByPropertyName = true,
-            HelpMessage = "Name of location.")]
-        public string Location { get; set; }
-
-        [Parameter(
             Mandatory = false,
-            Position = 1,
+            Position = 0,
             ValueFromPipelineByPropertyName = true,
             HelpMessage = "Name of template image.")]
         [ValidateNotNullOrEmpty]
@@ -69,14 +62,14 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             }
         }
 
-        private bool WriteAllTemplateImagesAtLocation(string location)
+        private bool WriteAllTemplateImages()
         {
             IEnumerable<TemplateImage> templateImages = null;
             List<TemplateImage> platformList = null;
             List<TemplateImage> customerList = null;
             IComparer<TemplateImage> comparer = null;
 
-            templateImages = RemoteAppClient.ListTemplateImages(location);
+            templateImages = RemoteAppClient.ListTemplateImages();
 
             if (templateImages != null && templateImages.Count() > 0)
             {
@@ -111,9 +104,9 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             return found;
         }
 
-        private bool WriteTemplateImageAtLocation(string location, string templateImageName)
+        private bool WriteTemplateImage(string templateImageName)
         {
-            TemplateImage templateImage = RemoteAppClient.GetTemplateImage(location, templateImageName);
+            TemplateImage templateImage = RemoteAppClient.GetTemplateImage(templateImageName);
 
             if (templateImage != null)
             {
@@ -133,11 +126,11 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
             if (ExactMatch)
             {
-                found = WriteTemplateImageAtLocation(Location, TemplateImageName);
+                found = WriteTemplateImage(TemplateImageName);
             }
             else
             {
-                found = WriteAllTemplateImagesAtLocation(Location);
+                found = WriteAllTemplateImages();
             }
 
             if (!found)
