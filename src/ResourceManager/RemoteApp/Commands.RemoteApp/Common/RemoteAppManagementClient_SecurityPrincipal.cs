@@ -15,12 +15,12 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
 
         internal SecurityPrincipalOperationErrorDetails AddUser(string ResourceGroupName, string collectionName, SecurityPrincipal userToAdd)
         {
-            return Client.Collection.AddSecurityPrincipal(userToAdd, collectionName, userToAdd.Name, ResourceGroupName);
+            return Client.Collection.AddSecurityPrincipal(userToAdd, collectionName, userToAdd.Upn, ResourceGroupName);
         }
 
         internal SecurityPrincipalOperationErrorDetails DeleteUser(string ResourceGroupName, string collectionName, SecurityPrincipal userToDelete)
         {
-            return Client.Collection.DeleteSecurityPrincipal(userToDelete, collectionName, userToDelete.Name, ResourceGroupName);
+            return Client.Collection.DeleteSecurityPrincipal(userToDelete, collectionName, userToDelete.Upn, ResourceGroupName);
         }
 
     }

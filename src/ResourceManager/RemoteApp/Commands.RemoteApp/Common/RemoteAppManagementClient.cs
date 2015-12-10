@@ -16,7 +16,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
 
         public const string RemoteAppApiVersionValue = "2014-09-01";
 
-        private IRemoteAppManagementClient Client { get; set; }
+        internal IRemoteAppManagementClient Client { get; set; }
 
         internal RemoteAppManagementClientWrapper(AzureContext content, AzureSubscription subscription)
         {
@@ -115,7 +115,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
 
                 if (!(String.Equals(details.AccountInfo.WorkspaceName, accountInfo.AccountInfo.WorkspaceName) && String.Equals(details.AccountInfo.PrivacyUrl, accountInfo.AccountInfo.PrivacyUrl)))
                 {
-                    accountInfo.AccountInfo.Location = details.AccountInfo.Location;
+                    accountInfo.AccountInfo.AccountLocation = details.AccountInfo.AccountLocation;
                     accountInfo.Tags = new Dictionary<string, string>();
 
                     if (String.IsNullOrEmpty(accountInfo.AccountInfo.WorkspaceName))

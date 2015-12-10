@@ -64,7 +64,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                     }
                 }
 
-                return string.Compare(first.User.Name, second.User.Name, StringComparison.OrdinalIgnoreCase);
+                return string.Compare(first.User.Upn, second.User.Upn, StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 SecurityPrincipalInfo userconsent = null;
 
                 userconsent = response.FirstOrDefault(user => user.User.SecurityPrincipalType == PrincipalType.User &&
-                     String.Equals(user.User.Name, UserUpn, StringComparison.OrdinalIgnoreCase));
+                     String.Equals(user.User.Upn, UserUpn, StringComparison.OrdinalIgnoreCase));
 
                 if (userconsent == null)
                 {
@@ -106,7 +106,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 else
                 {
                     spList = response.Where(user => user.User.SecurityPrincipalType == PrincipalType.User &&
-                        Wildcard.IsMatch(user.User.Name));
+                        Wildcard.IsMatch(user.User.Upn));
                 }
 
                 if (spList != null && spList.Count() > 0)

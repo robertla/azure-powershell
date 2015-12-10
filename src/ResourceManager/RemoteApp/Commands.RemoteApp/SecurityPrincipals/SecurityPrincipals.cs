@@ -33,7 +33,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {
                 AadObjectId = null,
                 Description = null,
-                Name = userUpn,
+                Upn = userUpn,
                 SecurityPrincipalType = PrincipalType.User,
                 UserIdType = provider
             };

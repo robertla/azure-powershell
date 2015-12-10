@@ -12,11 +12,16 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
+using LocalModels;
+using Microsoft.Azure.Management.RemoteApp;
 using Microsoft.Azure.Management.RemoteApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
@@ -33,7 +38,6 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
 
         private bool found = false;
-
 
         public class TemplateImageComparer : IComparer<TemplateImage>
         {
@@ -61,15 +65,77 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 return string.Compare(first.TemplateImageName, second.TemplateImageName, StringComparison.OrdinalIgnoreCase);
             }
         }
+        private ArmUserVhdArray GetAllUserVhd()
+        {
+            ErrorRecord er = null;
+            RemoteAppManagementClient Client = this.RemoteAppClient.Client as RemoteAppManagementClient;
+            HttpRequestMessage httpRequest = new HttpRequestMessage();
+            CancellationToken cancellationToken = default(CancellationToken);
+            HttpResponseMessage result = null;
+            HttpStatusCode statusCode = HttpStatusCode.NotImplemented;
+            Microsoft.Azure.Common.Authentication.Models.AzureEnvironment environment = this.DefaultProfile.Context.Environment;
+            string responseContent = null;
+            string uri = null;
+            ArmUserVhdArray userVhds = null;
+
+            foreach (KeyValuePair<Microsoft.Azure.Common.Authentication.Models.AzureEnvironment.Endpoint, string> endpoint in environment.Endpoints)
+            {
+                if (endpoint.Key == Microsoft.Azure.Common.Authentication.Models.AzureEnvironment.Endpoint.ResourceManager)
+                {
+                    uri = endpoint.Value;
+                    break;
+                }
+            }
+
+            uri += "subscriptions/{subscriptionId}/providers/Microsoft.ClassicStorage/images?api-version=2015-06-01";
+
+            uri = uri.Replace("{subscriptionId}", Uri.EscapeDataString(Client.SubscriptionId));
+            httpRequest.RequestUri = new Uri(uri);
+            httpRequest.Method = new HttpMethod("GET");
+
+            // Set Headers
+            httpRequest.Headers.TryAddWithoutValidation("x-ms-client-request-id", Guid.NewGuid().ToString());
+            httpRequest.Headers.TryAddWithoutValidation("accept-language", this.RemoteAppClient.Client.AcceptLanguage);
+
+            // Set credentials
+            cancellationToken.ThrowIfCancellationRequested();
+            Client.Credentials.ProcessHttpRequestAsync(httpRequest, cancellationToken).Wait();
+
+
+            // Send request
+            result = Client.HttpClient.SendAsync(httpRequest, cancellationToken).Result;
+            statusCode = result.StatusCode;
+
+            if (statusCode != HttpStatusCode.OK && statusCode != HttpStatusCode.Accepted)
+            {
+                string msg = "Operation returned an invalid status code: " + statusCode.ToString();
+                er = RemoteAppCollectionErrorState.CreateErrorRecordFromString(msg, String.Empty, null, ErrorCategory.NotSpecified);
+
+                ThrowTerminatingError(er);
+            }
+
+            responseContent = result.Content.ReadAsStringAsync().Result;
+            userVhds = Newtonsoft.Json.JsonConvert.DeserializeObject<ArmUserVhdArray>(responseContent, Client.DeserializationSettings);
+
+            return userVhds;
+        }
 
         private bool WriteAllTemplateImages()
         {
             IEnumerable<TemplateImage> templateImages = null;
-            List<TemplateImage> platformList = null;
-            List<TemplateImage> customerList = null;
+            ArmUserVhdArray vhds = null;
+            List<TemplateImage> platformList = new List<TemplateImage>();
+            List<TemplateImage> customerList = new List<TemplateImage>();
             IComparer<TemplateImage> comparer = null;
 
             templateImages = RemoteAppClient.ListTemplateImages();
+            vhds = GetAllUserVhd();
+
+            if (vhds != null && vhds.Value != null)
+            {
+
+                WriteObject(vhds.Value, true);
+            }
 
             if (templateImages != null && templateImages.Count() > 0)
             {
@@ -107,6 +173,18 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         private bool WriteTemplateImage(string templateImageName)
         {
             TemplateImage templateImage = RemoteAppClient.GetTemplateImage(templateImageName);
+            ArmUserVhdArray vhds = null;
+            ArmUserVhdWrapper vhd = null;
+
+            vhds = GetAllUserVhd();
+            vhd = vhds.Value.Single((d) => 
+                { return String.Equals(d.Properties.OperatingSystemDisk.DiskName, templateImageName, StringComparison.InvariantCultureIgnoreCase); });
+
+            if (vhd != null)
+            {
+                WriteObject(vhd);
+                found = true;
+            }
 
             if (templateImage != null)
             {
