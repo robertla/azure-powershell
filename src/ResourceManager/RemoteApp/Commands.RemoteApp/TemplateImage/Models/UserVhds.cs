@@ -57,4 +57,9 @@ namespace LocalModels
 
         public string VhdUri { get; set; }
     }
+
+    public class UserVhdImage : UserVhd
+    {
+        public string Name { get; set; }
+    }
 }

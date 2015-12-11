@@ -177,6 +177,7 @@
       <DependentUpon>Commands.RemoteApp.resx</DependentUpon>
     </Compile>
     <Compile Include="Collection\GetAzureRemoteAppCollection.cs" />
+    <Compile Include="Common\ArmHttpCalls.cs" />
     <Compile Include="Common\RemoteAppArmCmdletBase.cs" />
     <Compile Include="Common\Exception.cs" />
     <Compile Include="Common\RemoteAppManagementClient_Application.cs" />

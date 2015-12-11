@@ -25,19 +25,17 @@ using System.Threading;
 
 namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 {
-    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppTemplateImage")]
+    [Cmdlet(VerbsCommon.Get, "AzureRmRemoteAppTemplateImage"),OutputType(typeof(TemplateImage),typeof(UserVhdImage))]
     public class GetAzureRemoteAppTemplateImage : RemoteAppArmCmdletBase
     {
         [Parameter(
             Mandatory = false,
             Position = 0,
             ValueFromPipelineByPropertyName = true,
-            HelpMessage = "Name of template image.")]
+            HelpMessage = "Name of template image or user vhd.")]
         [ValidateNotNullOrEmpty]
         public string TemplateImageName { get; set; }
 
-
-        private bool found = false;
 
         public class TemplateImageComparer : IComparer<TemplateImage>
         {
@@ -65,57 +63,54 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 return string.Compare(first.TemplateImageName, second.TemplateImageName, StringComparison.OrdinalIgnoreCase);
             }
         }
-        private ArmUserVhdArray GetAllUserVhd()
+
+        public class VHDImageComparer : IComparer<UserVhdImage>
         {
-            ErrorRecord er = null;
-            RemoteAppManagementClient Client = this.RemoteAppClient.Client as RemoteAppManagementClient;
-            HttpRequestMessage httpRequest = new HttpRequestMessage();
-            CancellationToken cancellationToken = default(CancellationToken);
-            HttpResponseMessage result = null;
-            HttpStatusCode statusCode = HttpStatusCode.NotImplemented;
-            Microsoft.Azure.Common.Authentication.Models.AzureEnvironment environment = this.DefaultProfile.Context.Environment;
-            string responseContent = null;
-            string uri = null;
-            ArmUserVhdArray userVhds = null;
-
-            foreach (KeyValuePair<Microsoft.Azure.Common.Authentication.Models.AzureEnvironment.Endpoint, string> endpoint in environment.Endpoints)
+            public int Compare(UserVhdImage first, UserVhdImage second)
             {
-                if (endpoint.Key == Microsoft.Azure.Common.Authentication.Models.AzureEnvironment.Endpoint.ResourceManager)
+                if (first == null)
                 {
-                    uri = endpoint.Value;
-                    break;
+                    if (second == null)
+                    {
+                        return 0; // both null are equal
+                    }
+                    else
+                    {
+                        return -1; // second is greateer
+                    }
                 }
+                else
+                {
+                    if (second == null)
+                    {
+                        return 1; // first is greater as it is not null
+                    }
+                }
+
+                return string.Compare(first.Name, second.Name, StringComparison.OrdinalIgnoreCase);
             }
+        }
 
-            uri += "subscriptions/{subscriptionId}/providers/Microsoft.ClassicStorage/images?api-version=2015-06-01";
+         private ArmUserVhdArray GetAllUserVhd()
+        {
+            RemoteAppManagementClient client = this.RemoteAppClient.Client as RemoteAppManagementClient;
+            Microsoft.Azure.Common.Authentication.Models.AzureEnvironment environment = this.DefaultProfile.Context.Environment;
+            ArmHttpCallUtility armHttpCall = new ArmHttpCallUtility(environment, client);
+            ArmUserVhdArray userVhds = null;
+            string resourceUri = "Microsoft.ClassicStorage/images?api-version=2015-06-01";
+            string responseContent = null;
 
-            uri = uri.Replace("{subscriptionId}", Uri.EscapeDataString(Client.SubscriptionId));
-            httpRequest.RequestUri = new Uri(uri);
-            httpRequest.Method = new HttpMethod("GET");
-
-            // Set Headers
-            httpRequest.Headers.TryAddWithoutValidation("x-ms-client-request-id", Guid.NewGuid().ToString());
-            httpRequest.Headers.TryAddWithoutValidation("accept-language", this.RemoteAppClient.Client.AcceptLanguage);
-
-            // Set credentials
-            cancellationToken.ThrowIfCancellationRequested();
-            Client.Credentials.ProcessHttpRequestAsync(httpRequest, cancellationToken).Wait();
-
-
-            // Send request
-            result = Client.HttpClient.SendAsync(httpRequest, cancellationToken).Result;
-            statusCode = result.StatusCode;
-
-            if (statusCode != HttpStatusCode.OK && statusCode != HttpStatusCode.Accepted)
+            try
             {
-                string msg = "Operation returned an invalid status code: " + statusCode.ToString();
-                er = RemoteAppCollectionErrorState.CreateErrorRecordFromString(msg, String.Empty, null, ErrorCategory.NotSpecified);
-
-                ThrowTerminatingError(er);
+                responseContent = armHttpCall.GetHttpArmResource(resourceUri);
+            }
+            catch (ArmHttpException e)
+            {
+                ErrorRecord er = new ErrorRecord(e, e.ExceptionMessage, e.Category, null);
+                WriteError(er);
             }
 
-            responseContent = result.Content.ReadAsStringAsync().Result;
-            userVhds = Newtonsoft.Json.JsonConvert.DeserializeObject<ArmUserVhdArray>(responseContent, Client.DeserializationSettings);
+            userVhds = Newtonsoft.Json.JsonConvert.DeserializeObject<ArmUserVhdArray>(responseContent, client.DeserializationSettings);
 
             return userVhds;
         }
@@ -126,15 +121,40 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             ArmUserVhdArray vhds = null;
             List<TemplateImage> platformList = new List<TemplateImage>();
             List<TemplateImage> customerList = new List<TemplateImage>();
-            IComparer<TemplateImage> comparer = null;
+            List<UserVhdImage> userVhdList = new List<UserVhdImage>();
+            IComparer<TemplateImage> templateImageComparer = null;
+            IComparer<UserVhdImage> userVhdComparer = null;
+            bool found = false;
 
             templateImages = RemoteAppClient.ListTemplateImages();
             vhds = GetAllUserVhd();
 
             if (vhds != null && vhds.Value != null)
             {
+                foreach(ArmUserVhdWrapper armVhd in vhds.Value)
+                {
+                    if (String.Equals(armVhd.Properties.OperatingSystemDisk.OsState, "Generalized", StringComparison.CurrentCultureIgnoreCase) &&
+                        String.Equals(armVhd.Properties.OperatingSystemDisk.OperatingSystem, "Windows", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        userVhdList.Add( new UserVhdImage()
+                            {
+                               Name = armVhd.Name,
+                               OsState = armVhd.Properties.OperatingSystemDisk.OsState,
+                               DiskName = armVhd.Properties.OperatingSystemDisk.DiskName,
+                               OperatingSystem = armVhd.Properties.OperatingSystemDisk.OperatingSystem,
+                               VhdUri = armVhd.Properties.OperatingSystemDisk.VhdUri
+                            });
+                    }
+                }
 
-                WriteObject(vhds.Value, true);
+                if (UseWildcard)
+                {
+                    userVhdList = userVhdList.Where((v => Wildcard.IsMatch(v.Name))).ToList();
+                }
+
+                userVhdComparer = new VHDImageComparer();
+                userVhdList.Sort();
+                WriteObject(userVhdList, true);
             }
 
             if (templateImages != null && templateImages.Count() > 0)
@@ -143,8 +163,6 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 {
                     templateImages = templateImages.Where(t => Wildcard.IsMatch(t.TemplateImageName));
                 }
-
-                comparer = new TemplateImageComparer();
 
                 foreach (TemplateImage image in templateImages)
                 {
@@ -158,10 +176,11 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                     }
                 }
 
-                customerList.Sort(comparer);
+                templateImageComparer = new TemplateImageComparer();
+                customerList.Sort(templateImageComparer);
                 WriteObject(customerList, true);
 
-                platformList.Sort(comparer);
+                platformList.Sort(templateImageComparer);
                 WriteObject(platformList, true);
 
                 found = true;
@@ -175,9 +194,10 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             TemplateImage templateImage = RemoteAppClient.GetTemplateImage(templateImageName);
             ArmUserVhdArray vhds = null;
             ArmUserVhdWrapper vhd = null;
+            bool found = false;
 
             vhds = GetAllUserVhd();
-            vhd = vhds.Value.Single((d) => 
+            vhd = vhds.Value.First((d) => 
                 { return String.Equals(d.Properties.OperatingSystemDisk.DiskName, templateImageName, StringComparison.InvariantCultureIgnoreCase); });
 
             if (vhd != null)
@@ -197,6 +217,8 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
         public override void ExecuteCmdlet()
         {
+            bool found = false;
+
             if (!String.IsNullOrWhiteSpace(TemplateImageName))
             {
                 CreateWildcardPattern(TemplateImageName);

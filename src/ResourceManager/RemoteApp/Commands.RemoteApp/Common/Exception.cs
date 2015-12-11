@@ -162,7 +162,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                 }
             }
 
-            string exceptionMessage = String.Format("{0:T} - {1} in call to server HTTP Status: {2}",
+            string exceptionMessage = String.Format(Commands_RemoteApp.HttpStatusCodeFormat,
                         DateTime.Now,
                         erStateToUse.ExceptionMessage,
                         status);

@@ -171,4 +171,7 @@
   <data name="UpdateCollection" xml:space="preserve">
     <value>Update Collection</value>
   </data>
+  <data name="HttpStatusCodeFormat" xml:space="preserve">
+    <value>"{0:T} - {1} in call to server HTTP Status: {2}"</value>
+  </data>
 </root>

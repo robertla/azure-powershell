@@ -33,7 +33,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
         [Parameter(Mandatory = false,
             Position = 2,
-            HelpMessage = "Unique alias of the program, Wildcards are permitted.")]
+            HelpMessage = "Unique alias of the program. Wildcards are permitted.")]
         [ValidateNotNullOrEmpty()]
         public string ProgramName { get; set; }
 
@@ -98,7 +98,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                     }
                     else if (UseWildcard)
                     {
-                        matchingApps = response.Where(app => Wildcard.IsMatch(app.StartMenuApplicationName)).ToList(); ;
+                        matchingApps = response.Where(app => Wildcard.IsMatch(app.StartMenuApplicationName)).ToList();
                     }
 
                     if (matchingApps != null && matchingApps.Count() > 0)

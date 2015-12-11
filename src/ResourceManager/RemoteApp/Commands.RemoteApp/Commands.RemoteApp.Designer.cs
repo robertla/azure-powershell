@@ -124,6 +124,15 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;{0:T} - {1} in call to server HTTP Status: {2}&quot;.
+        /// </summary>
+        internal static string HttpStatusCodeFormat {
+            get {
+                return ResourceManager.GetString("HttpStatusCodeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Both domain name and credentials must be specified..
         /// </summary>
         internal static string InvalidADArguments {

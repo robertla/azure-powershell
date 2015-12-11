@@ -42,11 +42,13 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         [ValidateNotNullOrEmpty()]
         public string RemoteAppProgram { get; set; }
 
-        [Parameter(Mandatory = false,
-            Position = 3,
+        [Parameter(Mandatory = true,
+            Position = 2,
+            ValueFromPipelineByPropertyName = true,
             HelpMessage = "Published program alias",
             ParameterSetName = FilterByAlias)]
         [ValidateNotNullOrEmpty()]
+        [Alias("ApplicationAlias")]
         public string Alias { get; set; }
 
         public class ApplicationComparer : IComparer<PublishedApplicationDetails>
