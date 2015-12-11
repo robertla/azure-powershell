@@ -31,6 +31,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
 
         [Parameter(Mandatory = true,
             Position = 2,
+            ValueFromPipelineByPropertyName = true,
             HelpMessage = "Unique name which is used to identify this application.")]
         public string ApplicationAlias { get; set; }
 

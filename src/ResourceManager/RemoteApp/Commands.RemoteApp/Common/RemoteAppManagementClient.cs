@@ -14,8 +14,6 @@ namespace Microsoft.Azure.Commands.RemoteApp.Common
     {
         public const string DefaultRemoteAppArmNamespace = "Microsoft.RemoteApp";
 
-        public const string RemoteAppApiVersionValue = "2014-09-01";
-
         internal IRemoteAppManagementClient Client { get; set; }
 
         internal RemoteAppManagementClientWrapper(AzureContext content, AzureSubscription subscription)

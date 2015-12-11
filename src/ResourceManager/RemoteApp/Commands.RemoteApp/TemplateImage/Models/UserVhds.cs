@@ -57,4 +57,54 @@ namespace LocalModels
 
         public string VhdUri { get; set; }
     }
+
+    public class UserVhdImage : UserVhd
+    {
+        public string Name { get; set; }
+    }
+
+    public enum ImageType
+    {
+
+        Unknown = 0,
+
+        CustomerImage = 1,
+
+        MicrosoftImage = 2,
+
+        CustomerVhd = 3,
+    }
+
+    public class CustomerImage
+    {
+        public string TemplateImageName { get; set; }
+
+        public IList<string> LocationList { get; set; }
+
+        public ImageType TemplateImageType { get; set; }
+
+        public DateTime? UploadCompleteTime { get; set; }
+
+        public long? NumberOfLinkedCollections { get; set; }
+
+        public static ImageType ConvertTemplateImageTypetoUserImageType (Microsoft.Azure.Management.RemoteApp.Models.TemplateImageType? type)
+        {
+            ImageType userImageType = ImageType.Unknown;
+
+            if (!type.HasValue)
+                return userImageType;
+
+            switch (type.Value)
+            {
+                case Microsoft.Azure.Management.RemoteApp.Models.TemplateImageType.CustomerImage:
+                    userImageType = ImageType.CustomerImage;
+                    break;
+                case Microsoft.Azure.Management.RemoteApp.Models.TemplateImageType .MicrosoftImage:
+                    userImageType = ImageType.MicrosoftImage;
+                    break;
+            }
+
+            return userImageType;
+        }
+    }
 }
