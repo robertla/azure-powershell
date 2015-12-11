@@ -205,6 +205,24 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restart VM {0}.
+        /// </summary>
+        internal static string RestartVmWarningCaptionFormat {
+            get {
+                return ResourceManager.GetString("RestartVmWarningCaptionFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} is on VM {1}. These users also have active sessions on this VM and will be logged off when the VM is rebooted: {2}.
+        /// </summary>
+        internal static string RestartVmWarningMessageFormat {
+            get {
+                return ResourceManager.GetString("RestartVmWarningMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RemoteApp session with UserUpn: {0} not found.
         /// </summary>
         internal static string SessionNotFoundByUserUpnFormat {
