@@ -42,11 +42,13 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         [ValidateNotNullOrEmpty()]
         public string RemoteAppProgram { get; set; }
 
-        [Parameter(Mandatory = false,
-            Position = 3,
+        [Parameter(Mandatory = true,
+            Position = 2,
+            ValueFromPipelineByPropertyName = true,
             HelpMessage = "Published program alias",
             ParameterSetName = FilterByAlias)]
         [ValidateNotNullOrEmpty()]
+        [Alias("ApplicationAlias")]
         public string Alias { get; set; }
 
         public class ApplicationComparer : IComparer<PublishedApplicationDetails>
@@ -72,7 +74,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
                     }
                 }
 
-                return string.Compare(first.DisplayName, second.DisplayName, StringComparison.OrdinalIgnoreCase);
+                return string.Compare(first.DisplayName, second.DisplayName, StringComparison.CurrentCultureIgnoreCase);
             }
         }
 
@@ -89,7 +91,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
             {
                 if (ExactMatch)
                 {
-                    appDetails = response.FirstOrDefault(app => String.Equals(app.DisplayName, RemoteAppProgram, StringComparison.InvariantCultureIgnoreCase));
+                    appDetails = response.FirstOrDefault(app => String.Equals(app.DisplayName, RemoteAppProgram, StringComparison.CurrentCultureIgnoreCase));
                     if (appDetails == null)
                     {
                         WriteErrorWithTimestamp("Program: " + RemoteAppProgram + " does not exist in collection " + CollectionName);

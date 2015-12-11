@@ -25,8 +25,8 @@ namespace LocalModels
 
         public Collection(Microsoft.Azure.Management.RemoteApp.Models.Collection col)
         {
-            Regex resourceNameRegEx = new Regex(@"/subscriptions/\S+/resourceGroups/(?<resourceName>\S+)/providers/\S+", RegexOptions.IgnoreCase);
-            Match resourceName = resourceNameRegEx.Match(col.Id);
+            Regex resourceNameRegEx = new Regex(@"/subscriptions/\S+/resourceGroups/(?<resourceGroupName>\S+)/providers/\S+", RegexOptions.IgnoreCase);
+            Match resourceGroupName = resourceNameRegEx.Match(col.Id);
 
             AdInfo = col.AdInfo;
             BillingPlanName = col.BillingPlanName;
@@ -47,16 +47,16 @@ namespace LocalModels
             SubnetName = col.SubnetName;
             TemplateImageName = col.TemplateImageName;
             TrialOnly = col.TrialOnly;
-            VnetName = String.IsNullOrWhiteSpace(col.VnetName) || col.VnetName.StartsWith("simplevnet-") ? "" : col.VnetName;
+            VnetName = String.IsNullOrWhiteSpace(col.VnetName) || col.VnetName.StartsWith("simplevnet-", StringComparison.InvariantCultureIgnoreCase) ? "" : col.VnetName;
             
             if (col.LastModifiedTimeUtc.HasValue) 
             {
                 LastModifiedLocalTime = col.LastModifiedTimeUtc.Value.ToLocalTime();
             }
 
-            if (resourceName.Success)
+            if (resourceGroupName.Success)
             {
-                ResourceGroupName = resourceName.Groups["resourceName"].Value;
+                ResourceGroupName = resourceGroupName.Groups["resourceGroupName"].Value;
             }
         }
     }
