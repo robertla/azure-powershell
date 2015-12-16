@@ -106,6 +106,15 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RemoteApp collection name: {0} not found.
+        /// </summary>
+        internal static string DefaultLogoffMessage {
+            get {
+                return ResourceManager.GetString("DefaultLogoffMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to find virtual machine {0}..
         /// </summary>
         internal static string FailedToFindVMImage {
@@ -120,6 +129,15 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         internal static string FailedToGetSasUriError {
             get {
                 return ResourceManager.GetString("FailedToGetSasUriError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure?.
+        /// </summary>
+        internal static string GenericAreYouSureQuestion {
+            get {
+                return ResourceManager.GetString("GenericAreYouSureQuestion", resourceCulture);
             }
         }
         
@@ -201,6 +219,15 @@ namespace Microsoft.Azure.Commands.RemoteApp {
         internal static string NoLocationsFound {
             get {
                 return ResourceManager.GetString("NoLocationsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No VM was found for user {0} in collection {1}..
+        /// </summary>
+        internal static string NoVmInCollectionForUserFormat {
+            get {
+                return ResourceManager.GetString("NoVmInCollectionForUserFormat", resourceCulture);
             }
         }
         

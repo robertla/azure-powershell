@@ -182,6 +182,7 @@
     <Compile Include="Common\Exception.cs" />
     <Compile Include="Common\RemoteAppManagementClient_Application.cs" />
     <Compile Include="Common\RemoteAppManagementClient_SecurityPrincipal.cs" />
+    <Compile Include="Common\RemoteAppManagementClient_TemplateImages.cs" />
     <Compile Include="Common\RemoteAppManagementClient_Vm.cs" />
     <Compile Include="Common\RemoteAppRegEx.cs" />
     <Compile Include="Common\Requires.cs" />
@@ -204,8 +205,8 @@
     <Compile Include="SecurityPrincipals\SecurityPrincipals.cs" />
     <Compile Include="TemplateImage\GetAzureRemoteAppTemplateImage.cs" />
     <Compile Include="TemplateImage\Models\UserVhds.cs" />
-    <Compile Include="TemplateImage\RemoveAzureRemoteAppTemplateImage.cs" />
     <Compile Include="Vm\GetAzureRemoteAppVm.cs" />
+    <Compile Include="Vm\Models\RestartVmDetails.cs" />
     <Compile Include="Vm\RestartAzureRemoteAppVm.cs" />
   </ItemGroup>
   <ItemGroup>

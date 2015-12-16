@@ -35,7 +35,7 @@ namespace Microsoft.Azure.Commands.RemoteApp.Cmdlet
         [Alias("Name")]
         public string CollectionName { get; set; }
 
-        [Parameter(Mandatory = true,
+        [Parameter(Mandatory = false,
             Position = 2,
             HelpMessage = "Name of the program. Wildcards are permitted.",
             ParameterSetName = FilterByName)]
